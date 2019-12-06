@@ -6,13 +6,13 @@ import Home from '../components/Home';
 
 const AppRouter = () => (
     <BrowserRouter>
-        <div>
+        <React.Fragment>
             <Header />
             <Switch>
                 <Route path='/' component={Home} exact={true}/>
             </Switch>
             <Footer />
-        </div>
+        </React.Fragment>
     </BrowserRouter>
 );
 

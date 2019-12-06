@@ -1,8 +1,9 @@
 import React from 'react';
 
 const Home = () => (
-    <div>
-        <p> This is the home thing! </p>
+    <div className='home'>
+        <button className='home__button'> NEW LIST </button>
+        <p className='home__infotext'> Start by pressing that big button up there! </p>
     </div>
 );
 
