@@ -1,8 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Header = () => (
     <div className='header'>
-        <button className='header__button' id='header__colabico'>COLABI.CO</button>
+        <Link to='/' className='header__button' id='header__colabico'>COLABI.CO</Link>
         <div className='header__right'>
             <button className='header__button' id='header__tweet'>TWEET</button>
             <button className='header__button' id='header__login'>LOGIN</button>
