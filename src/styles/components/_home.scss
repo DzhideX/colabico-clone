@@ -5,6 +5,10 @@
     justify-content: center;
     align-items: center;
     .home__button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
         width: 16rem;
         height: 7rem;
         margin-bottom: 3rem;
