@@ -1,36 +1,15 @@
-.form__home-button{
-    height: 2.7rem;
-    width: 9rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-    border: 0.025rem solid rgb(97,97,97);
-    border: 0.025rem solid rgba(97,97,97, .41);
-    border-radius: 0.3rem;
-    font-size: 1.5rem;
-    color: #7a7a7a;
-    margin-bottom: 2rem;
-    margin-top: -0.7rem;
-    font-weight: bold;
-    &:hover{
-        background-color:  #D500F9;
-        color: white;
-    }
-}
-
-.login__form{
+.signup__form{
     display: flex;
     flex-direction: column;
     width: 22.6rem;
-    height: 10.1rem;
+    height: 16.1rem;
     border-top-right-radius: 0.2rem;
     border-top-left-radius: 0.2rem;
     background-color:#292929;
     padding-top: 1rem;
 }
 
-.login__input{
+.signup__input{
     height: 2.8rem;
     color:#fff;
     background-color: #474747;
@@ -51,7 +30,7 @@
     }
 }
 
-.login__form__buttons{
+.signup__form__buttons{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -63,9 +42,16 @@
             background-color:  #2979FF;
         }
     }
+    button:nth-of-type(2){
+        border: 1px solid #FF9100;
+        margin-right: 1rem;
+        &:hover{
+            background-color:  #FF9100;
+        }
+    }
 }
 
-.login__form__button{
+.signup__form__button{
     background: none;
         color: white;
         border-radius: 0.2rem;
@@ -79,16 +65,7 @@
         cursor: pointer;
 }
 
-.login__form__resetbutton{
-    text-decoration: none;
-    border: 1px solid #FF9100;
-    margin-right: 1rem;
-    &:hover{
-        background-color:  #FF9100;
-    }
-}
-
-.login-form-signup{
+.signup-form-login{
     height: 2rem;
     width: 22.6rem;
     display: flex;
@@ -112,5 +89,17 @@
         a{
             text-decoration: underline;
         }
+    }
+}
+
+.signup__form__terms{
+    width: 22.6rem;
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: #7a7a7a;
+    a{
+        color: white;
+        text-decoration: none;
     }
 }

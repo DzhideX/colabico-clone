@@ -3,18 +3,18 @@ import { Link } from 'react-router-dom';
 
 const Login = () => (
     <div className='main-flex-container'>
-        <Link className='login__home-button' to='/'> COLABI.CO </Link>
+        <Link className='form__home-button' to='/'> COLABI.CO </Link>
         <div className='login__form'>
             <input className='login__input' placeholder='Username Or Email'></input>
             <input className='login__input' placeholder='Password'></input>
             <div className='login__form__buttons'>
                 <button className='login__form__button'>LOGIN</button>
-                <button className='login__form__button'>FORGOT?</button>
+                <Link to='/reset' className='login__form__button login__form__resetbutton'>FORGOT?</Link>
             </div>
         </div>
-        <div className='login-form-signup'>
-            <p className=''>Don't have an account? <a href='#0'>Sign up</a>!</p>
-        </div>
+        <Link to='/signup' className='login-form-signup'>
+            <p className=''>Don't have an account? <Link to='/signup'>Sign up</Link>!</p>
+        </Link>
     </div>
 );
 
