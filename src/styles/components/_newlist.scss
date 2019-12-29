@@ -5,6 +5,24 @@
     flex-direction: column;
 }
 
+.newlist__input{
+    margin-top: 2.3rem;
+    font-size: 1.6rem;
+    font-style: italic;
+    width: 100%;
+    border: none;
+    background-color: #1E1E1E;
+    color: white;
+    text-transform: uppercase;
+    text-align: center;
+    &::placeholder{
+        color: #535353;
+    }
+    &:focus{
+        outline: none;
+    }
+}
+
 .newlist__placeholder{
     margin-top: 2.3rem;
     font-size: 1.6rem;
@@ -12,7 +30,7 @@
     width: 100%;
     border: none;
     background-color: #1E1E1E;
-    cursor: pointer;
+    cursor: text;
     img{
         visibility: hidden;
     }
@@ -43,7 +61,7 @@
 .newlist__placeholder__area__icon{
     color: white;
     height: 0.8rem;
-    margin-left: 0.2rem;
+    margin-left: 0.7rem;
     border: 0.05rem solid rgba(255,255,255,0.4);
     padding: 0.3rem;
     box-sizing: content-box;
