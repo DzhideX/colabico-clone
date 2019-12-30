@@ -6,11 +6,31 @@ const NewList = () => {
     const [listName, setListName ] = useState('');
     const [listNameState, setListNameState] = useState('button');
     const textInput =  useRef();
+
+    const [doneState, setDoneState] = useState(false);
+    const [workingState, setWorkingState] = useState(false);
+    const [pendingState, setPendingState] = useState(false);
+
     const changeToInput = () => {
         setListNameState('input');
         setTimeout(() => {
             textInput.current.focus();
         },0);
+    }
+
+    const onInputFocus = (e) =>{
+        if(listName === ''){
+            e.target.placeholder = 'NAMELESS';
+        }else{
+            e.target.placeholder = listName;
+        }
+    }
+
+    const onInputChange = (e) => {
+        setListName((e.target.value).toUpperCase());
+        if(e.target.value === ''){
+            e.target.placeholder = 'NAMELESS';
+        }
     }
     
     return(
@@ -28,19 +48,19 @@ const NewList = () => {
         {listNameState === 'input' && 
         <input 
             onBlur={(e) => setListNameState('button')} 
-            onFocus={(e) => e.target.placeholder = listName} 
+            onFocus={onInputFocus} 
             placeholder='(NAME THIS LIST)' 
             className='newlist__input'
             value={listName}
-            onChange={(e) => setListName((e.target.value).toUpperCase())}
+            onChange={onInputChange}
             ref={textInput}>
         </input>}
         <input type='text' className='newlist__taskinput' placeholder='Add a new task...'></input>
         <div className='newlist__filterarea'>
             <p>Show:</p>
-            <button className='newlist__filterareabutton'>DONE</button>
-            <button className='newlist__filterareabutton'>WORKING</button>
-            <button className='newlist__filterareabutton'>PENDING</button>
+            <button onClick={(e) => setDoneState(!doneState)} className={`newlist__filterareabutton ${doneState === true ?'newlist__filterareabutton--clicked' : ''}`}>DONE</button>
+            <button onClick={(e) => setWorkingState(!workingState)} className={`newlist__filterareabutton ${workingState === true ?'newlist__filterareabutton--clicked' : ''}`}>WORKING</button>
+            <button onClick={(e) => setPendingState(!pendingState)} className={`newlist__filterareabutton ${pendingState === true ?'newlist__filterareabutton--clicked' : ''}`}>PENDING</button>
         </div>
     </div>
     );
