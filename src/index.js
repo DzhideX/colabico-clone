@@ -5,6 +5,7 @@ import * as serviceWorker from './serviceWorker';
 import AppRouter from './routers/AppRouter';
 // eslint-disable-next-line
 import firebase from './firebase/firebase';
+require('dotenv').config();
 
 ReactDOM.render(<AppRouter />, document.getElementById('root'));
 
