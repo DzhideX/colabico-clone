@@ -17,9 +17,8 @@ const database = firebase.database();
 
 export { firebase, database as default };
 
-database.ref().set(
-    {user:{
-        tasks:{
-            setup:'WORKED'
-        }
-    }});
+database.ref().set({users:
+    {
+        username: 'Edvin',
+        password: 'Password'
+    }})

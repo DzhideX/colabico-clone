@@ -40,7 +40,7 @@ const NewList = () => {
             onClick={changeToInput}
             className='newlist__placeholder'>
                 <div className='newlist__placeholder__area'>
-                    <p className='newlist__placeholder__area__name'>{listName === '' ? '(NAME THIS LIST)' : listName}</p>
+                    <p className={listName === '' ? 'newlist__placeholder__area__name' : 'newlist__placeholder__area__name--value'}> {listName === '' ? '(NAME THIS LIST)' : listName}</p>
                     <img className='newlist__placeholder__area__icon' src={edit} alt='edit icon'></img>
                 </div>
             </button>
