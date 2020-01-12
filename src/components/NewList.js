@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import edit from '../pictures/edit.png';
+import ListItem from './ListItem';
 
 const NewList = () => {
 
@@ -34,35 +35,36 @@ const NewList = () => {
     }
     
     return(
-        <div className='newlist'>
-        {listNameState === 'button' && (
-            <button 
-            onClick={changeToInput}
-            className='newlist__placeholder'>
-                <div className='newlist__placeholder__area'>
-                    <p className={listName === '' ? 'newlist__placeholder__area__name' : 'newlist__placeholder__area__name--value'}> {listName === '' ? '(NAME THIS LIST)' : listName}</p>
-                    <img className='newlist__placeholder__area__icon' src={edit} alt='edit icon'></img>
-                </div>
-            </button>
-        )}
-        {listNameState === 'input' && 
-        <input 
-            onBlur={(e) => setListNameState('button')} 
-            onFocus={onInputFocus} 
-            placeholder='(NAME THIS LIST)' 
-            className='newlist__input'
-            value={listName}
-            onChange={onInputChange}
-            ref={textInput}>
-        </input>}
-        <input type='text' className='newlist__taskinput' placeholder='Add a new task...'></input>
-        <div className='newlist__filterarea'>
-            <p>Show:</p>
-            <button onClick={(e) => setDoneState(!doneState)} className={`newlist__filterareabutton ${doneState === true ?'newlist__filterareabutton--clicked' : ''}`}>DONE</button>
-            <button onClick={(e) => setWorkingState(!workingState)} className={`newlist__filterareabutton ${workingState === true ?'newlist__filterareabutton--clicked' : ''}`}>WORKING</button>
-            <button onClick={(e) => setPendingState(!pendingState)} className={`newlist__filterareabutton ${pendingState === true ?'newlist__filterareabutton--clicked' : ''}`}>PENDING</button>
+            <div className='newlist'>
+            {listNameState === 'button' && (
+                <button 
+                onClick={changeToInput}
+                className='newlist__placeholder'>
+                    <div className='newlist__placeholder__area'>
+                        <p className={listName === '' ? 'newlist__placeholder__area__name' : 'newlist__placeholder__area__name--value'}> {listName === '' ? '(NAME THIS LIST)' : listName}</p>
+                        <img className='newlist__placeholder__area__icon' src={edit} alt='edit icon'></img>
+                    </div>
+                </button>
+            )}
+            {listNameState === 'input' && 
+            <input 
+                onBlur={(e) => setListNameState('button')} 
+                onFocus={onInputFocus} 
+                placeholder='(NAME THIS LIST)' 
+                className='newlist__input'
+                value={listName}
+                onChange={onInputChange}
+                ref={textInput}>
+            </input>}
+            <input type='text' className='newlist__taskinput' placeholder='Add a new task...'></input>
+            <div className='newlist__filterarea'>
+                <p>Show:</p>
+                <button onClick={(e) => setDoneState(!doneState)} className={`newlist__filterareabutton ${doneState === true ?'newlist__filterareabutton--clicked' : ''}`}>DONE</button>
+                <button onClick={(e) => setWorkingState(!workingState)} className={`newlist__filterareabutton ${workingState === true ?'newlist__filterareabutton--clicked' : ''}`}>WORKING</button>
+                <button onClick={(e) => setPendingState(!pendingState)} className={`newlist__filterareabutton ${pendingState === true ?'newlist__filterareabutton--clicked' : ''}`}>PENDING</button>
+            </div>
+            <ListItem value='Stvar'/>
         </div>
-    </div>
     );
 };
 
