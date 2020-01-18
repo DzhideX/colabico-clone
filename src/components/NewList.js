@@ -12,6 +12,9 @@ const NewList = () => {
     const [workingState, setWorkingState] = useState(false);
     const [pendingState, setPendingState] = useState(false);
 
+    const [currentTodo, updateCurrentTodo] = useState('');
+    const [todos, updateTodos] = useState([]);
+
     const changeToInput = () => {
         setListNameState('input');
         setTimeout(() => {
@@ -32,6 +35,18 @@ const NewList = () => {
         if(e.target.value === ''){
             e.target.placeholder = 'NAMELESS';
         }
+    }
+
+    const handleInputKeyPress = (e) => {
+        if(e.key === 'Enter'){
+            updateTodos([...todos, e.target.value]);
+            updateCurrentTodo('');
+        }
+    }
+
+    const deleteListItem = (todoValue) => {
+        const newTodoList = todos.filter(todo => todo !== todoValue);
+        updateTodos(newTodoList);
     }
     
     return(
@@ -56,14 +71,21 @@ const NewList = () => {
                 onChange={onInputChange}
                 ref={textInput}>
             </input>}
-            <input type='text' className='newlist__taskinput' placeholder='Add a new task...'></input>
+            <input 
+            type='text' 
+            className='newlist__taskinput' 
+            placeholder='Add a new task...'
+            value={currentTodo}
+            onChange={(e) => updateCurrentTodo(e.target.value)}
+            onKeyPress={handleInputKeyPress}
+            ></input>
             <div className='newlist__filterarea'>
                 <p>Show:</p>
                 <button onClick={(e) => setDoneState(!doneState)} className={`newlist__filterareabutton ${doneState === true ?'newlist__filterareabutton--clicked' : ''}`}>DONE</button>
                 <button onClick={(e) => setWorkingState(!workingState)} className={`newlist__filterareabutton ${workingState === true ?'newlist__filterareabutton--clicked' : ''}`}>WORKING</button>
                 <button onClick={(e) => setPendingState(!pendingState)} className={`newlist__filterareabutton ${pendingState === true ?'newlist__filterareabutton--clicked' : ''}`}>PENDING</button>
             </div>
-            <ListItem value='Stvar'/>
+            {todos.map((todo,index) => <ListItem deleteListItem={deleteListItem} initialValue={todo} key={index}/>)}
         </div>
     );
 };

@@ -6,10 +6,11 @@
     border-radius: 0.1rem;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    // justify-content: space-between;
+    font-size: 1.15rem;
     &:hover{
         background-color: #313131;
-        cursor: pointer;
+        cursor: text;
         .list-item__left__square{
             display: block;
         }
@@ -22,20 +23,47 @@
     }
 }
 
+.list-item__input{
+    height: 100%;
+    width:100%;
+    background-color: transparent;
+    border: none;
+    padding-left: 1rem;
+    font-size: 1.15rem;
+    color: #d4d4d4;
+    &:focus{
+        outline: none;
+    }
+}
+
 .list-item__left{
     display: flex;
     align-items: center;
+    flex:1;
+    height: 100%;
     // background-color: red;
 }
 
 .list-item__left__square{
     margin-left: 1rem;
     display: none;
+    cursor: pointer;
 }
 
 .list-item__left__text{
     margin-left: 2rem;
-    color: white;
+    color: #d4d4d4;
+    flex:1;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.list-item__left__text--done{
+    @extend .list-item__left__text;
+    text-decoration: line-through;
+    font-style: italic;
+    color: #535353;
 }
 
 .list-item__right{
@@ -50,6 +78,7 @@
     border-radius: 0.2rem;
     margin-right: 0.5rem;
     visibility: hidden;
+    cursor: pointer;
     &:hover{
         background-color: white;
     }
@@ -62,6 +91,7 @@
     border-radius: 0.2rem;
     margin-right: 0.5rem;
     visibility: hidden;
+    cursor: pointer;
     &:hover{
         background-color: white;
     }
