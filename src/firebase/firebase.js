@@ -17,8 +17,4 @@ const database = firebase.database();
 
 export { firebase, database as default };
 
-database.ref().set({users:
-    {
-        username: 'Edvin',
-        password: 'Password'
-    }})
+// database.ref('todos').push({'value':'stuff'});

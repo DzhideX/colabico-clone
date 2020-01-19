@@ -1,8 +1,22 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import edit from '../pictures/edit.png';
 import ListItem from './ListItem';
+import database from '../firebase/firebase';
 
 const NewList = () => {
+
+    useEffect(() => {
+        database.ref('todos').on('value',(snapshot) => {
+            let dbTodos = snapshot.val();
+            let newTodos = [];
+            for(let key in dbTodos){
+                if (dbTodos.hasOwnProperty(key)) {
+                    newTodos.push(dbTodos[key].value);
+                }
+            }
+            updateTodos(newTodos);
+        });
+    },[]);
 
     const [listName, setListName ] = useState('');
     const [listNameState, setListNameState] = useState('button');
@@ -40,6 +54,7 @@ const NewList = () => {
     const handleInputKeyPress = (e) => {
         if(e.key === 'Enter'){
             updateTodos([...todos, e.target.value]);
+            database.ref('todos').push({'value':e.target.value});
             updateCurrentTodo('');
         }
     }
