@@ -15,6 +15,7 @@ const NewList = () => {
                 }
             }
             updateTodos(newTodos);
+            updateTodoObject(dbTodos);
         });
     },[]);
 
@@ -22,12 +23,14 @@ const NewList = () => {
     const [listNameState, setListNameState] = useState('button');
     const textInput =  useRef();
 
-    const [doneState, setDoneState] = useState(false);
-    const [workingState, setWorkingState] = useState(false);
-    const [pendingState, setPendingState] = useState(false);
-
     const [currentTodo, updateCurrentTodo] = useState('');
     const [todos, updateTodos] = useState([]);
+    const [todoObject, updateTodoObject] = useState({});
+    const [filters, updateFilters] = useState({
+       done: true,
+       working: true,
+       pending: true 
+    });
 
     const changeToInput = () => {
         setListNameState('input');
@@ -57,11 +60,14 @@ const NewList = () => {
             database.ref('todos').push({'value':e.target.value});
             updateCurrentTodo('');
         }
+        // console.log(todoObject);
+        console.log()
     }
 
-    const deleteListItem = (todoValue) => {
+    const deleteListItem = (todoValue,key) => {
         const newTodoList = todos.filter(todo => todo !== todoValue);
         updateTodos(newTodoList);
+        database.ref(`/todos/${key}`).remove();
     }
     
     return(
@@ -96,11 +102,11 @@ const NewList = () => {
             ></input>
             <div className='newlist__filterarea'>
                 <p>Show:</p>
-                <button onClick={(e) => setDoneState(!doneState)} className={`newlist__filterareabutton ${doneState === true ?'newlist__filterareabutton--clicked' : ''}`}>DONE</button>
-                <button onClick={(e) => setWorkingState(!workingState)} className={`newlist__filterareabutton ${workingState === true ?'newlist__filterareabutton--clicked' : ''}`}>WORKING</button>
-                <button onClick={(e) => setPendingState(!pendingState)} className={`newlist__filterareabutton ${pendingState === true ?'newlist__filterareabutton--clicked' : ''}`}>PENDING</button>
+                <button onClick={(e) => updateFilters({...filters, done: !filters.done})} className={`newlist__filterareabutton ${!filters.done && 'newlist__filterareabutton--clicked'}`}>DONE</button>
+                <button onClick={(e) => updateFilters({...filters, working: !filters.working})} className={`newlist__filterareabutton ${!filters.working && 'newlist__filterareabutton--clicked'}`}>WORKING</button>
+                <button onClick={(e) => updateFilters({...filters, pending: !filters.pending})} className={`newlist__filterareabutton ${!filters.pending &&'newlist__filterareabutton--clicked'}`}>PENDING</button>
             </div>
-            {todos.map((todo,index) => <ListItem deleteListItem={deleteListItem} initialValue={todo} key={index}/>)}
+            {Object.keys(todoObject).map(key => <ListItem deleteListItem={deleteListItem} initialValue={todoObject[key].value} key={key} objectKey={key}/>)}
         </div>
     );
 };
