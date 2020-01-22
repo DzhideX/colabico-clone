@@ -14,8 +14,8 @@ const NewList = () => {
                     newTodos.push(dbTodos[key].value);
                 }
             }
-            updateTodos(newTodos);
             updateTodoObject(dbTodos);
+            console.log(dbTodos);
         });
     },[]);
 
@@ -24,7 +24,6 @@ const NewList = () => {
     const textInput =  useRef();
 
     const [currentTodo, updateCurrentTodo] = useState('');
-    const [todos, updateTodos] = useState([]);
     const [todoObject, updateTodoObject] = useState({});
     const [filters, updateFilters] = useState({
        done: true,
@@ -56,17 +55,12 @@ const NewList = () => {
 
     const handleInputKeyPress = (e) => {
         if(e.key === 'Enter'){
-            updateTodos([...todos, e.target.value]);
-            database.ref('todos').push({'value':e.target.value});
+            database.ref('todos').push({'value':e.target.value, state: 'pending'});
             updateCurrentTodo('');
         }
-        // console.log(todoObject);
-        console.log()
     }
 
     const deleteListItem = (todoValue,key) => {
-        const newTodoList = todos.filter(todo => todo !== todoValue);
-        updateTodos(newTodoList);
         database.ref(`/todos/${key}`).remove();
     }
     

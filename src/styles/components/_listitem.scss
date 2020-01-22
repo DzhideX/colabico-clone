@@ -23,6 +23,13 @@
     }
 }
 
+.list-item--working{
+    @extend .list-item;
+    background-color: #443232;
+    animation: pulsate 2.5s ease-out;
+    animation-iteration-count: infinite;
+}
+
 .list-item__input{
     height: 100%;
     width:100%;
@@ -113,4 +120,25 @@
         background-color: #00e676;
     }
     visibility: hidden;
+}
+
+.list-item__right__button--stop{
+    @extend .list-item__right__button;
+    border-color: #ff1744;
+    &:hover{
+        background-color: #ff1744;
+    }
+    visibility: visible;
+}
+
+@keyframes pulsate {
+    0% { 
+        background-color: #292929;
+    }
+    50% { 
+        background-color: #443232;
+    }
+    100% { 
+        background-color: #292929;
+    }
 }
