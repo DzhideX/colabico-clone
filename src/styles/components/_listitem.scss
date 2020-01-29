@@ -26,7 +26,7 @@
 .list-item--working{
     @extend .list-item;
     background-color: #443232;
-    animation: pulsate 2.5s ease-out;
+    animation: pulsateTodo 2.5s ease-out;
     animation-iteration-count: infinite;
 }
 
@@ -131,7 +131,7 @@
     visibility: visible;
 }
 
-@keyframes pulsate {
+@keyframes pulsateTodo {
     0% { 
         background-color: #292929;
     }
