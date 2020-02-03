@@ -1,23 +1,40 @@
 import React, { useState, useRef, useEffect } from 'react';
 import edit from '../pictures/edit.png';
 import ListItem from './ListItem';
-import database from '../firebase/firebase';
+import database, { firebase } from '../firebase/firebase';
+import { connect } from 'react-redux';
 
-const NewList = () => {
+const NewList = ({userId}) => {
 
     useEffect(() => {
-        database.ref('todos').on('value',(snapshot) => {
-            let dbTodos = snapshot.val();
-            let newTodos = [];
-            for(let key in dbTodos){
-                if (dbTodos.hasOwnProperty(key)) {
-                    newTodos.push(dbTodos[key].value);
+        if(userId){
+            database.ref(`users/${userId}/todos`).on('value',(snapshot) => {
+                let dbTodos = snapshot.val();
+                if(dbTodos){
+                    console.log(dbTodos);
+                // let newTodos = [];
+                // for(let key in dbTodos){
+                //     if (dbTodos.hasOwnProperty(key)) {
+                //         newTodos.push(dbTodos[key].value);
+                //     }
+                // }
+                updateTodoObject(dbTodos);
+                }else{
+                    database.ref(`users/${userId}/todos`).push({state:'pending',value:'Do stuff!'}).then(() => {
+                        database.ref(`users/${userId}/todos`).on('value',(snapshot) => {
+                            let dbTodos = snapshot.val();
+                            console.log(dbTodos);
+                            updateTodoObject(dbTodos);
+                        });
+                    });
                 }
-            }
-            updateTodoObject(dbTodos);
-            console.log(dbTodos);
-        });
-    },[]);
+            });  
+        }
+    },[userId]);  
+    
+    // const getTodos = async () => {
+    //     const id = await userId;
+    // } 
 
     const [listName, setListName ] = useState('');
     const [listNameState, setListNameState] = useState('button');
@@ -55,13 +72,13 @@ const NewList = () => {
 
     const handleInputKeyPress = (e) => {
         if(e.key === 'Enter'){
-            database.ref('todos').push({'value':e.target.value, state: 'pending'});
+            database.ref(`users/${userId}/todos`).push({'value':e.target.value, state: 'pending'});
             updateCurrentTodo('');
         }
     }
 
     const deleteListItem = (todoValue,key) => {
-        database.ref(`/todos/${key}`).remove();
+        database.ref(`users/${userId}/todos/${key}`).remove();
     }
     
     return(
@@ -105,4 +122,9 @@ const NewList = () => {
     );
 };
 
-export default NewList;
+const mapStateToProps = state => ({
+    userId: state.userId,
+    todos: state.todos
+});
+
+export default connect(mapStateToProps)(NewList);

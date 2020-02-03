@@ -99,9 +99,10 @@
     font-size: 0.9rem;
     margin-top: 0.05rem;
     text-decoration: none;
-    a{
+    span{
         text-decoration: none;
         color: white;
+        cursor: pointer;
         &:hover{
             text-decoration: underline;
         }
