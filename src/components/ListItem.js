@@ -2,10 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import {Square, CheckSquare, Trash2, Copy} from 'react-feather';
 import database from '../firebase/firebase';
 
-const ListItem = ({initialValue, deleteListItem,objectKey}) => {
+const ListItem = ({initialValue, deleteListItem,objectKey,userId}) => {
 
     useEffect(() => {
-        database.ref(`todos/${objectKey}/state`).on('value',snapshot => {
+        database.ref(`users/${userId}/todos/${objectKey}/state`).on('value',snapshot => {
+            console.log(snapshot.val());
             updateTodoState(snapshot.val());
         });
     },[objectKey]);
@@ -26,7 +27,7 @@ const ListItem = ({initialValue, deleteListItem,objectKey}) => {
     }
 
     const setTodoState = (desiredState) => {
-        database.ref(`todos/${objectKey}/state`).set(desiredState);
+        database.ref(`users/${userId}/todos/${objectKey}/state`).set(desiredState);
     }
 
     return(

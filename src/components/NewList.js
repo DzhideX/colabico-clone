@@ -30,6 +30,7 @@ const NewList = ({userId}) => {
                 }
             });  
         }
+        console.log('*'+userId+'*');
     },[userId]);  
     
     // const getTodos = async () => {
@@ -72,7 +73,9 @@ const NewList = ({userId}) => {
 
     const handleInputKeyPress = (e) => {
         if(e.key === 'Enter'){
-            database.ref(`users/${userId}/todos`).push({'value':e.target.value, state: 'pending'});
+            if(userId){
+                database.ref(`users/${userId}/todos`).push({'value':e.target.value, state: 'pending'});
+            }
             updateCurrentTodo('');
         }
     }
@@ -117,7 +120,7 @@ const NewList = ({userId}) => {
                 <button onClick={(e) => updateFilters({...filters, working: !filters.working})} className={`newlist__filterareabutton ${!filters.working && 'newlist__filterareabutton--clicked'}`}>WORKING</button>
                 <button onClick={(e) => updateFilters({...filters, pending: !filters.pending})} className={`newlist__filterareabutton ${!filters.pending &&'newlist__filterareabutton--clicked'}`}>PENDING</button>
             </div>
-            {Object.keys(todoObject).map(key => <ListItem deleteListItem={deleteListItem} initialValue={todoObject[key].value} key={key} objectKey={key}/>)}
+            {Object.keys(todoObject).map(key => <ListItem userId={userId} deleteListItem={deleteListItem} initialValue={todoObject[key].value} key={key} objectKey={key}/>)}
         </div>
     );
 };

@@ -28,6 +28,7 @@
     }
     #header__tweet{
         border: 1px solid #FF9100;
+        cursor: pointer;
         &:hover{
             background-color:  #FF9100;
         }
@@ -35,8 +36,18 @@
     #header__login{
         border: 1px solid #2979FF;
         margin-left: 1rem;
+        cursor: pointer;
         &:hover{
             background-color:  #2979FF;
+        }
+    }
+    #header__logout{
+        border: 0.5px solid #616161;
+        margin-left: 1rem;
+        cursor: pointer;
+        &:hover{
+            background-color:  white;
+            color: black;
         }
     }
 }
