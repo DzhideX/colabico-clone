@@ -3,35 +3,53 @@ import edit from '../pictures/edit.png';
 import ListItem from './ListItem';
 import database, { firebase } from '../firebase/firebase';
 import { connect } from 'react-redux';
+import getUserData from '../redux/actions/action';
 
-const NewList = ({userId}) => {
+const NewList = ({userId, todos, dispatch}) => {
 
     useEffect(() => {
         if(userId){
-            database.ref(`users/${userId}/todos`).on('value',(snapshot) => {
-                let dbTodos = snapshot.val();
-                if(dbTodos){
-                    console.log(dbTodos);
-                // let newTodos = [];
+            // database.ref(`users/${userId}/todos`).on('value',(snapshot) => {
+            //     let dbTodos = snapshot.val();
+                
+            // });  
+            dispatch(getUserData(userId));
+        }else if(userId === ''){
+            updateTodoObject({});
+        }
+        if(todos){
+            console.log(todos);
+        }
+        // let newTodos = [];
                 // for(let key in dbTodos){
                 //     if (dbTodos.hasOwnProperty(key)) {
                 //         newTodos.push(dbTodos[key].value);
                 //     }
                 // }
-                updateTodoObject(dbTodos);
-                }else{
-                    database.ref(`users/${userId}/todos`).push({state:'pending',value:'Do stuff!'}).then(() => {
-                        database.ref(`users/${userId}/todos`).on('value',(snapshot) => {
-                            let dbTodos = snapshot.val();
-                            console.log(dbTodos);
-                            updateTodoObject(dbTodos);
-                        });
-                    });
-                }
-            });  
-        }
-        console.log('*'+userId+'*');
+        // console.log('*'+userId+'*');
     },[userId]);  
+
+    useEffect(() => {
+        if(todos){
+            console.log(todos);
+            // if(dbTodos){
+                // console.log(dbTodos);
+                //
+            updateTodoObject(todos);
+            // }else{
+                // database.ref(`users/${userId}/todos`).push({state:'pending',value:'Do stuff!'}).then(() => {
+                //     database.ref(`users/${userId}/todos`).on('value',(snapshot) => {
+                //         let dbTodos = snapshot.val();
+                //         console.log(dbTodos);
+                //         updateTodoObject(dbTodos);
+                //     });
+                // });
+            // }
+        }else{
+            console.log('no-todos');
+            updateTodoObject({});
+        }
+    },[todos])
     
     // const getTodos = async () => {
     //     const id = await userId;
@@ -75,6 +93,7 @@ const NewList = ({userId}) => {
         if(e.key === 'Enter'){
             if(userId){
                 database.ref(`users/${userId}/todos`).push({'value':e.target.value, state: 'pending'});
+                dispatch(getUserData(userId));
             }
             updateCurrentTodo('');
         }
@@ -82,6 +101,7 @@ const NewList = ({userId}) => {
 
     const deleteListItem = (todoValue,key) => {
         database.ref(`users/${userId}/todos/${key}`).remove();
+        dispatch(getUserData(userId));
     }
     
     return(

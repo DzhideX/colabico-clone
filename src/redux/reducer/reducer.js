@@ -1,4 +1,4 @@
-import firebase from '../../firebase/firebase';
+import database from '../../firebase/firebase';
 
 const reducer = (state = {
     userId: '',
@@ -7,10 +7,8 @@ const reducer = (state = {
     switch(action.type){
         case 'SET_USER_ID':
             return { ...state, userId: action.payload.userId}
-        // case GET_MOVIES_RECIEVED:
-        //     return { ...state, fetching: false, fetched: true, movies: action.payload.Search, error: action.payload.Response === 'False' ? true: false  };
-        // case GET_MOVIES_ERROR:
-        //     return { ...state, fetching: false, error: action.payload};
+        case 'SET_USER_DATA':
+            return { ...state, todos: action.payload}
         default:
             return state;
     };
