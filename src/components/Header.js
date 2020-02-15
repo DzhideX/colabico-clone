@@ -11,7 +11,6 @@ const Header = ({userId,setUserId}) => {
 
     useEffect(() => {
         if(userId){
-            console.log(userId);
             setUserState('logout');
         }else{
             setUserState('login');

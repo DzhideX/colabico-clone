@@ -2,10 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import {Square, CheckSquare, Trash2, Copy} from 'react-feather';
 import database from '../firebase/firebase';
 
-const ListItem = ({initialValue, deleteListItem,objectKey,userId}) => {
+const ListItem = ({initialValue, deleteListItem,objectKey,userId,listId}) => {
 
     useEffect(() => {
-        database.ref(`users/${userId}/todos/${objectKey}/state`).on('value',snapshot => {
+        database.ref(`users/${userId}/${listId}/todos/${objectKey}/state`).on('value',snapshot => {
             console.log(snapshot.val());
             updateTodoState(snapshot.val());
         });
@@ -27,7 +27,7 @@ const ListItem = ({initialValue, deleteListItem,objectKey,userId}) => {
     }
 
     const setTodoState = (desiredState) => {
-        database.ref(`users/${userId}/todos/${objectKey}/state`).set(desiredState);
+        database.ref(`users/${userId}/${listId}/todos/${objectKey}/state`).set(desiredState);
     }
 
     return(
@@ -45,7 +45,7 @@ const ListItem = ({initialValue, deleteListItem,objectKey,userId}) => {
         </div>
         <div className='list-item__right'>
             <Copy className='list-item__right__copy' size={13} color={copyIconColor} onMouseOver={()=> setCopyIconColor('black')} onMouseLeave={()=> setCopyIconColor('white')}/>
-            <Trash2 className='list-item__right__trash' size={13} color={trashIconColor} onMouseOver={()=> setTrashIconColor('black')} onMouseLeave={()=> setTrashIconColor('white')} onClick={()=> {deleteListItem(initialValue,objectKey)}}/>
+            <Trash2 className='list-item__right__trash' size={13} color={trashIconColor} onMouseOver={()=> setTrashIconColor('black')} onMouseLeave={()=> setTrashIconColor('white')} onClick={()=> {deleteListItem(objectKey)}}/>
             {todoState === 'pending' && <button className='list-item__right__button' onClick={()=>{setTodoState('working')}}>START</button>}
             {todoState === 'working' && <button className='list-item__right__button--stop' onClick={()=>{setTodoState('pending')}}>STOP</button>}
         </div>

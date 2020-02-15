@@ -1,35 +1,46 @@
 import React, { useState, useRef, useEffect } from 'react';
 import edit from '../pictures/edit.png';
+import ListItem from './ListItem';
 import database from '../firebase/firebase';
 import { connect } from 'react-redux';
 import getUserData from '../redux/actions/action';
-import { Redirect } from 'react-router-dom';
 
-
-const NewList = ({userId, todos, dispatch}) => {
+const List = ({userId, todos, dispatch, location, listNameRedux}) => {
 
     useEffect(() => {
         if(userId){ 
-            console.log('/l/new');
+            console.log(listNameRedux);
+            dispatch(getUserData(userId, location.pathname.split('/')[2])); //ovdje treba id
         }else if(userId === ''){
+            updateTodoObject({});
         }
+        if(todos){
+            console.log(todos);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[userId]);  
 
     useEffect(() => {
         if(todos){
+            updateTodoObject(todos);
         }else{
             console.log('no-todos');
+            updateTodoObject({});
         }
-    },[todos])
+    },[todos]);
 
-    const [redirect, updateRedirect] = useState();
+    useEffect(() => {
+        if(listNameRedux && listNameRedux !== '0'){
+            setListName(listNameRedux);
+        }
+    },[listNameRedux]);
 
     const [listName, setListName ] = useState('');
     const [listNameState, setListNameState] = useState('button');
     const textInput =  useRef();
 
     const [currentTodo, updateCurrentTodo] = useState('');
-    // const [todoObject, updateTodoObject] = useState({});
+    const [todoObject, updateTodoObject] = useState({});
     const [filters, updateFilters] = useState({
        done: true,
        working: true,
@@ -59,20 +70,21 @@ const NewList = ({userId, todos, dispatch}) => {
     }
 
     const handleInputKeyPress = (e) => {
-        e.persist();
         if(e.key === 'Enter'){
             if(userId){
-                database.ref(`users/${userId}`).push({'name':'0'}).then(res => {
-                    database.ref(`users/${userId}/${res.getKey()}/todos`).push({'value':e.target.value, state: 'pending'});
-                    updateRedirect(`/l/${res.getKey()}`);
-                });
+                // if(Object.entries(todoObject).length === 0 && todoObject.constructor === Object){
+                database.ref(`users/${userId}/${location.pathname.split('/')[2]}/todos`).push({'value':e.target.value, state: 'pending'});
+                dispatch(getUserData(userId,location.pathname.split('/')[2]));
             }
+            updateCurrentTodo('');
         }
     }
+
+    const deleteListItem = (key) => {
+        database.ref(`users/${userId}/${location.pathname.split('/')[2]}/todos/${key}`).remove(); // ovdje treba list id
+        dispatch(getUserData(userId,location.pathname.split('/')[2]));// ovdje treba list id
+    }
     
-    if(redirect){
-        return <Redirect to={redirect}/>
-    }else{
     return(
             <div className='newlist'>
             {listNameState === 'button' && (
@@ -88,12 +100,13 @@ const NewList = ({userId, todos, dispatch}) => {
             {listNameState === 'input' && 
             <input 
                 onBlur={(e) => {
+                    e.persist();
                     setListNameState('button');
-                    console.log(listName);
-                    database.ref(`users/${userId}`).push({'name':listName}).then(res => {
-                        updateRedirect(`/l/${res.getKey()}`);
+                    database.ref(`users/${userId}/${location.pathname.split('/')[2]}/name`).set(e.target.value).then(res => {
+                        dispatch(getUserData(userId,location.pathname.split('/')[2]));
                     });
-                }} 
+                }
+            } 
                 onFocus={onInputFocus} 
                 placeholder='(NAME THIS LIST)' 
                 className='newlist__input'
@@ -115,14 +128,15 @@ const NewList = ({userId, todos, dispatch}) => {
                 <button onClick={(e) => updateFilters({...filters, working: !filters.working})} className={`newlist__filterareabutton ${!filters.working && 'newlist__filterareabutton--clicked'}`}>WORKING</button>
                 <button onClick={(e) => updateFilters({...filters, pending: !filters.pending})} className={`newlist__filterareabutton ${!filters.pending &&'newlist__filterareabutton--clicked'}`}>PENDING</button>
             </div>
+            {Object.keys(todoObject).map(key => <ListItem listId={location.pathname.split('/')[2]} userId={userId} deleteListItem={deleteListItem} initialValue={todoObject[key].value} key={key} objectKey={key}/>)}
         </div>
     );
-            }
 };
 
 const mapStateToProps = state => ({
     userId: state.userId,
-    todos: state.todos
+    todos: state.todos,
+    listNameRedux: state.listName
 });
 
-export default connect(mapStateToProps)(NewList);
+export default connect(mapStateToProps)(List);

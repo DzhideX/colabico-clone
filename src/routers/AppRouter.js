@@ -10,6 +10,7 @@ import NewList from '../components/NewList';
 import Login from '../components/Login';
 import Signup from '../components/Signup';
 import Reset from '../components/Reset';
+import List from '../components/List';
 import { connect } from 'react-redux';
 import { firebase } from '../firebase/firebase';
 
@@ -33,7 +34,7 @@ const Router = ({location, userId, setUserId}) => {
                     <Route path='/privacy' component={Privacy}/>
                     <Route path='/terms' component={Terms}/>
                     <Route path='/l/new' component={NewList} exact={true}/>
-                    <Route path='/l/:id' component={NewList}/>
+                    <Route path='/l/:id' component={List}/>
                     <Route path='/login' component={Login} />
                     <Route path='/reset' component={Reset}/>
                     <Route path='/signup' component={Signup}/>
