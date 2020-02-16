@@ -39,9 +39,12 @@
     width: 46.3rem;
     height: 2.7rem;
     margin-bottom: 0.1rem;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
 }
 
-.home__Listbox--top{
+.home__listbox--top{
     @extend .home__listbox;
     border-top-right-radius: 0.2;
     border-top-left-radius: 0.2;
@@ -55,6 +58,15 @@
     border-top-left-radius: 0;
     border-bottom-left-radius: 0.2;
     border-bottom-right-radius: 0.2;
+}
+
+.home__listbox__data{
+    height: 100%;
+    flex:1;
+    display: flex;
+    justify-content: flex-start;
+    background-color: #292929;
+    border: none;
 }
 
 .no__route__button{
