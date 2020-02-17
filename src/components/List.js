@@ -9,7 +9,6 @@ const List = ({userId, todos, dispatch, location, listNameRedux}) => {
 
     useEffect(() => {
         if(userId){ 
-            console.log(listNameRedux);
             dispatch(getUserData(userId, location.pathname.split('/')[2])); //ovdje treba id
         }else if(userId === ''){
             updateTodoObject({});
@@ -31,6 +30,7 @@ const List = ({userId, todos, dispatch, location, listNameRedux}) => {
 
     useEffect(() => {
         if(listNameRedux && listNameRedux !== '0'){
+            console.log(listNameRedux);
             setListName(listNameRedux);
         }
     },[listNameRedux]);

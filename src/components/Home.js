@@ -1,24 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import  database  from '../firebase/firebase';
 import { Trash2 } from 'react-feather';
 
 
-const ListBox = ({listName, lastTodo, numberOfTodos,className}) => {
+const ListBox = ({listName, lastTodo, numberOfTodos,className,listKey}) => {
+
+    const [trashIconColor, setTrashIconColor] = useState('white');
+    const [redirect, updateRedirect] = useState();
 
 
-
-    return(
-        <div className={className}>
-           <button className='home__listbox__data'>
-                <p>{listName}</p>
-                <p>{lastTodo}</p>
-                <p>({numberOfTodos})</p>
-           </button>
-           <Trash2 color='white'/>
-        </div>
-    );
+    if(redirect){
+        return <Redirect to={redirect} />
+    }else{
+        return(
+            <div className={className}>
+               <button className='home__listbox__data' onClick={() => updateRedirect(`/l/${listKey}`)}>
+                    {listName !== '0' && listName && <p className='home__listbox__data__listname'>{listName}</p>}
+                    {lastTodo && <p className='home__listbox__data__lasttodo'> {lastTodo} </p>}
+                    {numberOfTodos && <p className='home__listbox__data__numbertodos'>({numberOfTodos})</p>}
+               </button>
+               <Trash2 onMouseOver={()=> setTrashIconColor('black')} onMouseLeave={()=> setTrashIconColor('white')} size={13} className='home__lisbox__trash' color={trashIconColor}/>
+            </div>
+        );
+    }
+    
 }
 
 
@@ -29,15 +36,11 @@ const Home = ({userId}) => {
 
     useEffect(() => {
         if(userId){
-            console.log(userId);
-            const tempArr = [];
             database.ref(`users/${userId}`).once('value').then(snapshot => {
                 Object.keys(snapshot.val()).map((key,i) => {
                     const todoObject = snapshot.val()[key].todos;
-                    console.log(todoObject);
                     Object.keys(todoObject).map((newKey,newI) => {
                         if(Object.keys(todoObject).length === newI+1){
-                            // tempArr.push(todoObject[newKey].value);
                             updateLastTodos(prevState => [...prevState, todoObject[newKey].value]);
                         }
                     });
