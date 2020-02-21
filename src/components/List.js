@@ -13,9 +13,6 @@ const List = ({userId, todos, dispatch, location, listNameRedux}) => {
         }else if(userId === ''){
             updateTodoObject({});
         }
-        if(todos){
-            console.log(todos);
-        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[userId]);  
 
@@ -128,11 +125,12 @@ const List = ({userId, todos, dispatch, location, listNameRedux}) => {
                 <button onClick={(e) => updateFilters({...filters, working: !filters.working})} className={`newlist__filterareabutton ${!filters.working && 'newlist__filterareabutton--clicked'}`}>WORKING</button>
                 <button onClick={(e) => updateFilters({...filters, pending: !filters.pending})} className={`newlist__filterareabutton ${!filters.pending &&'newlist__filterareabutton--clicked'}`}>PENDING</button>
             </div>
-            {Object.keys(todoObject).map(key => <ListItem listId={location.pathname.split('/')[2]} userId={userId} deleteListItem={deleteListItem} initialValue={todoObject[key].value} key={key} objectKey={key}/>)}
+            {Object.keys(todoObject).map(key =>  filters[todoObject[key].state] && <ListItem listId={location.pathname.split('/')[2]} userId={userId} deleteListItem={deleteListItem} initialValue={todoObject[key].value} key={key} objectKey={key}/>)}
         </div>
     );
 };
 
+//(todoObject[key].state === filters.working || todoObject[key].state === filters.done || todoObject[key].state === filters.pending)
 const mapStateToProps = state => ({
     userId: state.userId,
     todos: state.todos,
