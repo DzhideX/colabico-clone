@@ -13,6 +13,7 @@ const List = ({userId, todos, dispatch, location, listNameRedux}) => {
         }else if(userId === ''){
             updateTodoObject({});
         }
+        console.log('rerender');
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[userId]);  
 
@@ -31,7 +32,9 @@ const List = ({userId, todos, dispatch, location, listNameRedux}) => {
             setListName(listNameRedux);
         }
     },[listNameRedux]);
-
+    
+    // const [numberOfRenderedTodos,updateNumberOfRenderedTodos] = useState(0);
+    let numberOfRenderedTodos = 0;
     const [listName, setListName ] = useState('');
     const [listNameState, setListNameState] = useState('button');
     const textInput =  useRef();
@@ -81,6 +84,14 @@ const List = ({userId, todos, dispatch, location, listNameRedux}) => {
         database.ref(`users/${userId}/${location.pathname.split('/')[2]}/todos/${key}`).remove(); // ovdje treba list id
         dispatch(getUserData(userId,location.pathname.split('/')[2]));// ovdje treba list id
     }
+
+    const updateParent = () => {
+        dispatch(getUserData(userId,location.pathname.split('/')[2]));
+    }
+
+    const renderEmpty = () => {
+        
+    }
     
     return(
             <div className='newlist'>
@@ -99,9 +110,17 @@ const List = ({userId, todos, dispatch, location, listNameRedux}) => {
                 onBlur={(e) => {
                     e.persist();
                     setListNameState('button');
-                    database.ref(`users/${userId}/${location.pathname.split('/')[2]}/name`).set(e.target.value).then(res => {
-                        dispatch(getUserData(userId,location.pathname.split('/')[2]));
-                    });
+                    console.log(`*${e.target.value}*`, e.target.value==='');
+                    if(e.target.value ===''){
+                        database.ref(`users/${userId}/${location.pathname.split('/')[2]}/name`).set('0').then(res => {
+                            dispatch(getUserData(userId,location.pathname.split('/')[2]));
+                        });
+                    }else{
+                        database.ref(`users/${userId}/${location.pathname.split('/')[2]}/name`).set(e.target.value).then(res => {
+                            dispatch(getUserData(userId,location.pathname.split('/')[2]));
+                        });
+                    }
+                    
                 }
             } 
                 onFocus={onInputFocus} 
@@ -125,7 +144,30 @@ const List = ({userId, todos, dispatch, location, listNameRedux}) => {
                 <button onClick={(e) => updateFilters({...filters, working: !filters.working})} className={`newlist__filterareabutton ${!filters.working && 'newlist__filterareabutton--clicked'}`}>WORKING</button>
                 <button onClick={(e) => updateFilters({...filters, pending: !filters.pending})} className={`newlist__filterareabutton ${!filters.pending &&'newlist__filterareabutton--clicked'}`}>PENDING</button>
             </div>
-            {Object.keys(todoObject).map(key =>  filters[todoObject[key].state] && <ListItem listId={location.pathname.split('/')[2]} userId={userId} deleteListItem={deleteListItem} initialValue={todoObject[key].value} key={key} objectKey={key}/>)}
+            {Object.keys(todoObject).map((key,i) =>  {
+                // let numberOfRenderedTodos = 0;
+                // console.log(numberOfRenderedTodos)
+                if(filters[todoObject[key].state]){
+                    ++numberOfRenderedTodos;
+                    console.log(numberOfRenderedTodos);
+                    return(<ListItem 
+                        listId={location.pathname.split('/')[2]} 
+                        userId={userId} 
+                        deleteListItem={deleteListItem} 
+                        initialValue={todoObject[key].value} 
+                        initialState={todoObject[key].state}
+                        key={key} 
+                        objectKey={key}
+                        updateParent={updateParent}
+                        />);
+                }else{
+                    // if(numberOfRenderedTodos===0){
+                    //     console.log('empty');
+                    //     return <p> Empty! </p>
+                    // }
+                }
+            })}
+            {renderEmpty()}
         </div>
     );
 };
