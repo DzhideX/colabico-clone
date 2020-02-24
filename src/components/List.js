@@ -31,6 +31,9 @@ const List = ({userId, todos, dispatch, location, listNameRedux}) => {
             console.log(listNameRedux);
             setListName(listNameRedux);
         }
+        if(listNameRedux === ''){
+            setListName('');
+        }
     },[listNameRedux]);
     
     // const [numberOfRenderedTodos,updateNumberOfRenderedTodos] = useState(0);

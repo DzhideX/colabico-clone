@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {connect} from 'react-redux';
 import { firebase } from '../firebase/firebase';
 
 const Header = ({userId,setUserId}) => {
-
-    const [redirect, updateRedirect] = useState();
 
     const [userState, setUserState] = useState('');
 
@@ -20,15 +18,12 @@ const Header = ({userId,setUserId}) => {
     const handleLogOut = () => {
         firebase.auth().signOut().then(function() {
             setUserId('');
-            updateRedirect('/');
+            window.location.href='/'
           }).catch(function(error) {
             // An error happened.
           });
     }
 
-    // if(redirect){
-    //     return <Redirect to={redirect}/>
-    // }else{
     return(
         <div className='header'>
             <Link to='/' className='header__button' id='header__colabico'>COLABI.CO</Link>
@@ -40,7 +35,6 @@ const Header = ({userId,setUserId}) => {
             </div>
         </div>
     );
-    // }
 }
 
 const mapStateToProps = state => ({

@@ -80,7 +80,7 @@ const NewList = ({userId, todos, dispatch}) => {
     if(redirect){
         return <Redirect to={{
             pathname: redirect,
-            state: redirect === '/' ? 'first-time' : ''
+            state: redirect === '/' ? 'first-time' : null
         }}/>
     }else{
     return(

@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import  database  from '../firebase/firebase';
 import { Trash2 } from 'react-feather';
+import Modal from 'react-modal';
 
 
 const ListBox = ({listName, lastTodo, numberOfTodos,className,listKey,deleteList}) => {
@@ -27,11 +28,29 @@ const ListBox = ({listName, lastTodo, numberOfTodos,className,listKey,deleteList
     
 }
 
+const customStyles = {
+    content : {
+      top                   : '9.3rem',
+      left                  : '50%',
+      right                 : 'auto',
+      bottom                : 'auto',
+      marginRight           : '-50%',
+      transform             : 'translate(-50%, -50%)',
+      width: '30rem',
+      backgroundColor: '#FCF6F5FF',
+      color: '#990011FF',
+      fontWeight: 'bold'
+    },
+    overlay: {
+            backgroundColor: 'transparent'
+        }
+  };
+
 const Home = ({userId,location}) => {
 
     const [lastTodos, updateLastTodos] = useState([]);
     const [listNames, updateListNames ] = useState();
-    const [welcomeMessage, updateWelcomeMessage] = useState();
+    const [modalIsOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
         if(userId){
@@ -52,12 +71,18 @@ const Home = ({userId,location}) => {
                     updateListNames({});
                 }
             })
+        }else{
+            updateListNames({});
         }
     },[userId]);
 
     useEffect(() => {
-        if(location){
-            console.log('location state:',location.state);
+        if(location.state){
+            console.log(location.state)
+            setIsOpen(true);
+            setTimeout(() => {
+                setIsOpen(false)
+            },7000);
         }
     },[location])
 
@@ -80,6 +105,13 @@ const Home = ({userId,location}) => {
 
     return (
         <div className='main-flex-container'>
+        <Modal
+            isOpen={modalIsOpen}
+            style={customStyles}
+            ariaHideApp={false}
+        >
+            <p> A new anonymous account has been made. When you press log out you will lose all of your data. To save your data, please create a new account! </p>
+        </Modal>
             <Link to='/l/new' className='home__button'> NEW LIST </Link>
             {(listNames && lastTodos) && Object.keys(listNames).map((key,i) => {
                 console.log(listNames[key].name)
