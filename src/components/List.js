@@ -88,10 +88,6 @@ const List = ({userId, todos, dispatch, location, listNameRedux}) => {
     const updateParent = () => {
         dispatch(getUserData(userId,location.pathname.split('/')[2]));
     }
-
-    const renderEmpty = () => {
-        
-    }
     
     return(
             <div className='newlist'>
@@ -161,13 +157,9 @@ const List = ({userId, todos, dispatch, location, listNameRedux}) => {
                         updateParent={updateParent}
                         />);
                 }else{
-                    // if(numberOfRenderedTodos===0){
-                    //     console.log('empty');
-                    //     return <p> Empty! </p>
-                    // }
                 }
             })}
-            {renderEmpty()}
+            {numberOfRenderedTodos === 0 && <p className='newlist__errormessage'> Select some or all 'show' preferences! </p>}
         </div>
     );
 };

@@ -5,11 +5,10 @@ import  database  from '../firebase/firebase';
 import { Trash2 } from 'react-feather';
 
 
-const ListBox = ({listName, lastTodo, numberOfTodos,className,listKey}) => {
+const ListBox = ({listName, lastTodo, numberOfTodos,className,listKey,deleteList}) => {
 
     const [trashIconColor, setTrashIconColor] = useState('white');
     const [redirect, updateRedirect] = useState();
-
 
     if(redirect){
         return <Redirect to={redirect} />
@@ -21,34 +20,46 @@ const ListBox = ({listName, lastTodo, numberOfTodos,className,listKey}) => {
                     {lastTodo && <p className='home__listbox__data__lasttodo'> {lastTodo} </p>}
                     {numberOfTodos && <p className='home__listbox__data__numbertodos'>({numberOfTodos})</p>}
                </button>
-               <Trash2 onMouseOver={()=> setTrashIconColor('black')} onMouseLeave={()=> setTrashIconColor('white')} size={13} className='home__lisbox__trash' color={trashIconColor}/>
+               <Trash2 onClick={() => deleteList(listKey)} onMouseOver={()=> setTrashIconColor('black')} onMouseLeave={()=> setTrashIconColor('white')} size={13} className='home__lisbox__trash' color={trashIconColor}/>
             </div>
         );
     }
     
 }
 
-
-
-const Home = ({userId}) => {
+const Home = ({userId,location}) => {
 
     const [lastTodos, updateLastTodos] = useState([]);
+    const [listNames, updateListNames ] = useState();
+    const [welcomeMessage, updateWelcomeMessage] = useState();
 
     useEffect(() => {
         if(userId){
             database.ref(`users/${userId}`).once('value').then(snapshot => {
-                Object.keys(snapshot.val()).map((key,i) => {
-                    const todoObject = snapshot.val()[key].todos;
-                    Object.keys(todoObject).map((newKey,newI) => {
-                        if(Object.keys(todoObject).length === newI+1){
-                            updateLastTodos(prevState => [...prevState, todoObject[newKey].value]);
+                if(snapshot.val()){
+                    Object.keys(snapshot.val()).map((key,i) => {
+                        const todoObject = snapshot.val()[key].todos;
+                        if(todoObject){
+                            Object.keys(todoObject).map((newKey,newI) => {
+                                if(Object.keys(todoObject).length === newI+1){
+                                    updateLastTodos(prevState => [...prevState, todoObject[newKey].value]);
+                                }
+                            });
                         }
-                    });
-                })
-                updateListNames(snapshot.val());
+                    })
+                    updateListNames(snapshot.val());
+                }else{
+                    updateListNames({});
+                }
             })
         }
     },[userId]);
+
+    useEffect(() => {
+        if(location){
+            console.log('location state:',location.state);
+        }
+    },[location])
 
     const setListBoxClass = (key) => {
         if(key === 0){
@@ -60,15 +71,50 @@ const Home = ({userId}) => {
         }
     }
 
-    const [listNames, updateListNames ] = useState();
+    const deleteList = (listKey) => {
+        database.ref(`users/${userId}/${listKey}`).remove();
+        let tempObj = {...listNames};
+        delete tempObj[listKey];
+        updateListNames(tempObj);
+    }
 
     return (
         <div className='main-flex-container'>
             <Link to='/l/new' className='home__button'> NEW LIST </Link>
-            {(listNames && lastTodos) ? Object.keys(listNames).map((key,i) => <ListBox lastTodo={lastTodos[i]} numberOfTodos={Object.keys(listNames[key].todos).length} listName={listNames[key].name} userId={userId} key={i} listKey={key} className={setListBoxClass(i)}/>) : <p className='home__infotext'> Start by pressing that big button up there! </p>}
+            {(listNames && lastTodos) && Object.keys(listNames).map((key,i) => {
+                console.log(listNames[key].name)
+                console.log();
+                console.log();
+                console.log(key); // not problem
+                if(lastTodos[i] && listNames[key].todos){
+                    return <ListBox 
+                    lastTodo={lastTodos[i]} 
+                    numberOfTodos={Object.keys(listNames[key].todos).length} 
+                    listName={listNames[key].name} 
+                    userId={userId} key={i} 
+                    listKey={key} 
+                    className={setListBoxClass(i)}
+                    deleteList={deleteList}/>
+                }else{
+                    return <ListBox 
+                    lastTodo={''} 
+                    numberOfTodos={'0'} 
+                    listName={listNames[key].name} 
+                    userId={userId} key={i} 
+                    listKey={key} 
+                    className={setListBoxClass(i)}
+                    deleteList={deleteList}/>
+                }
+                
+            })}
+            {(listNames && Object.entries(listNames).length === 0) && <p className='home__infotext'> Start by pressing that big button up there! </p>}
         </div>
     );
 }
+
+// { &&  listNames.constructor === Object && }
+
+
 
 const mapStateToProps = state => ({
     userId: state.userId,

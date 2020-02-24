@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import edit from '../pictures/edit.png';
-import database from '../firebase/firebase';
+import database, {firebase} from '../firebase/firebase';
 import { connect } from 'react-redux';
 import getUserData from '../redux/actions/action';
 import { Redirect } from 'react-router-dom';
@@ -66,12 +66,22 @@ const NewList = ({userId, todos, dispatch}) => {
                     database.ref(`users/${userId}/${res.getKey()}/todos`).push({'value':e.target.value, state: 'pending'});
                     updateRedirect(`/l/${res.getKey()}`);
                 });
+            }else{
+                firebase.auth().signInAnonymously().then(() => {
+                    updateRedirect('/')
+                }).catch(function(error) {
+                    var errorCode = error.code;
+                    console.log(errorCode);
+                });
             }
         }
     }
     
     if(redirect){
-        return <Redirect to={redirect}/>
+        return <Redirect to={{
+            pathname: redirect,
+            state: redirect === '/' ? 'first-time' : ''
+        }}/>
     }else{
     return(
             <div className='newlist'>
@@ -89,10 +99,13 @@ const NewList = ({userId, todos, dispatch}) => {
             <input 
                 onBlur={(e) => {
                     setListNameState('button');
-                    console.log(listName);
-                    database.ref(`users/${userId}`).push({'name':listName}).then(res => {
-                        updateRedirect(`/l/${res.getKey()}`);
-                    });
+                    if(userId){
+                        database.ref(`users/${userId}`).push({'name':listName}).then(res => {
+                            updateRedirect(`/l/${res.getKey()}`);
+                        });
+                    }else{
+
+                    }
                 }} 
                 onFocus={onInputFocus} 
                 placeholder='(NAME THIS LIST)' 

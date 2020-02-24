@@ -19,6 +19,7 @@ const Router = ({location, userId, setUserId}) => {
     useEffect(() => {
         firebase.auth().onAuthStateChanged(function(user) {
             if (user) {
+                console.log('is anonymous?',user.isAnonymous);
                 setUserId(user.uid);
             } else {
               // No user is signed in.
