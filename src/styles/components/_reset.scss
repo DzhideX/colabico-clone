@@ -69,7 +69,7 @@
     font-size: 0.9rem;
     margin-top: 0.05rem;
     text-decoration: none;
-    a{
+    span{
         text-decoration: none;
         color: white;
         &:hover{
@@ -83,4 +83,25 @@
             text-decoration: underline;
         }
     }
+}
+
+.reset__paragraph{
+    margin-bottom: 1rem;
+    width: 25rem;
+    text-align: center;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: #535353;
+}
+
+.reset__resend{
+    animation: pulsate 1.1s ease-out;
+    border: 0.06rem solid #00e676;
+    background-color: #00e6761A;
+    color: white;
+    width: 5rem;
+    height: 1.5rem;
+    border-radius: 0.2rem;
+    animation-iteration-count: infinite; 
+    margin-top: 1rem;
 }

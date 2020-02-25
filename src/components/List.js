@@ -27,11 +27,10 @@ const List = ({userId, todos, dispatch, location, listNameRedux}) => {
     },[todos]);
 
     useEffect(() => {
+        console.log(`_${listNameRedux}_`)
         if(listNameRedux && listNameRedux !== '0'){
-            console.log(listNameRedux);
             setListName(listNameRedux);
-        }
-        if(listNameRedux === ''){
+        }else if(listNameRedux === '' || listNameRedux === '0'){
             setListName('');
         }
     },[listNameRedux]);
@@ -143,12 +142,10 @@ const List = ({userId, todos, dispatch, location, listNameRedux}) => {
                 <button onClick={(e) => updateFilters({...filters, working: !filters.working})} className={`newlist__filterareabutton ${!filters.working && 'newlist__filterareabutton--clicked'}`}>WORKING</button>
                 <button onClick={(e) => updateFilters({...filters, pending: !filters.pending})} className={`newlist__filterareabutton ${!filters.pending &&'newlist__filterareabutton--clicked'}`}>PENDING</button>
             </div>
+            {/*eslint-disable-next-line array-callback-return*/}
             {Object.keys(todoObject).map((key,i) =>  {
-                // let numberOfRenderedTodos = 0;
-                // console.log(numberOfRenderedTodos)
                 if(filters[todoObject[key].state]){
                     ++numberOfRenderedTodos;
-                    console.log(numberOfRenderedTodos);
                     return(<ListItem 
                         listId={location.pathname.split('/')[2]} 
                         userId={userId} 
@@ -159,7 +156,6 @@ const List = ({userId, todos, dispatch, location, listNameRedux}) => {
                         objectKey={key}
                         updateParent={updateParent}
                         />);
-                }else{
                 }
             })}
             {numberOfRenderedTodos === 0 && <p className='newlist__errormessage'> Select some or all 'show' preferences! </p>}

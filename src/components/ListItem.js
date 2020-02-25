@@ -12,6 +12,7 @@ const ListItem = ({initialValue, deleteListItem,objectKey,userId,listId,updatePa
             }
             updateTodoState(snapshot.val());
         });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
 
     const [done, setDone] = useState(false);

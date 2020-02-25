@@ -1,5 +1,3 @@
-import database from '../../firebase/firebase';
-
 const reducer = (state = {
     userId: '',
     todos: [],
@@ -14,7 +12,6 @@ const reducer = (state = {
         default:
             return state;
     };
-    // return { ...state};
 };
 
 export default reducer;

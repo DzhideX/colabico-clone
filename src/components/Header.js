@@ -6,6 +6,7 @@ import { firebase } from '../firebase/firebase';
 const Header = ({userId,setUserId}) => {
 
     const [userState, setUserState] = useState('');
+    const [userAnonymous, updateUserAnonymous] = useState();
 
     useEffect(() => {
         if(userId){
@@ -13,22 +14,45 @@ const Header = ({userId,setUserId}) => {
         }else{
             setUserState('login');
         }
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                if(user.isAnonymous){
+                    updateUserAnonymous(user);
+                }
+            } else {
+              // No user is signed in.
+            }
+          });
     },[userId]);
 
     const handleLogOut = () => {
         firebase.auth().signOut().then(function() {
             setUserId('');
-            window.location.href='/'
+            window.location.href='/';
+            if(userAnonymous){
+                userAnonymous.delete().then(() => {}).catch(err => {
+                    console.log(err);
+                });
+            }
           }).catch(function(error) {
             // An error happened.
           });
+    }
+
+    const handleTwitter = () => {
+        // window.location.href='https://twitter.com/intent/tweet?text=Checkout%20https://colabi.co';
+        window.open(
+            'https://twitter.com/intent/tweet?text=Checkout%20https://colabi.co',
+            '_tab' 
+          );
+          window.open()
     }
 
     return(
         <div className='header'>
             <Link to='/' className='header__button' id='header__colabico'>COLABI.CO</Link>
             <div className='header__right'>
-                <button className='header__button' id='header__tweet'>TWEET</button>
+                <button onClick={handleTwitter} className='header__button' id='header__tweet'>TWEET</button>
                 {userState === 'login' ? 
                 <Link to='/login' className='header__button' id='header__login'>LOGIN</Link> : 
                 <button onClick={handleLogOut} className='header__button' id='header__logout'>LOGOUT</button>}

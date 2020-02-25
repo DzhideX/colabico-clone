@@ -56,14 +56,18 @@ const Home = ({userId,location}) => {
         if(userId){
             database.ref(`users/${userId}`).once('value').then(snapshot => {
                 if(snapshot.val()){
+                    // eslint-disable-next-line array-callback-return
                     Object.keys(snapshot.val()).map((key,i) => {
                         const todoObject = snapshot.val()[key].todos;
                         if(todoObject){
+                            // eslint-disable-next-line array-callback-return
                             Object.keys(todoObject).map((newKey,newI) => {
                                 if(Object.keys(todoObject).length === newI+1){
                                     updateLastTodos(prevState => [...prevState, todoObject[newKey].value]);
                                 }
                             });
+                        }else{
+                            updateLastTodos(prevState => [...prevState, '']);
                         }
                     })
                     updateListNames(snapshot.val());
@@ -78,7 +82,6 @@ const Home = ({userId,location}) => {
 
     useEffect(() => {
         if(location.state){
-            console.log(location.state)
             setIsOpen(true);
             setTimeout(() => {
                 setIsOpen(false)
@@ -110,14 +113,10 @@ const Home = ({userId,location}) => {
             style={customStyles}
             ariaHideApp={false}
         >
-            <p> A new anonymous account has been made. When you press log out you will lose all of your data. To save your data, please create a new account! </p>
+            <p> A new anonymous account has been created! When you log out you will lose all of your data. To save your data, create a new account! </p>
         </Modal>
             <Link to='/l/new' className='home__button'> NEW LIST </Link>
-            {(listNames && lastTodos) && Object.keys(listNames).map((key,i) => {
-                console.log(listNames[key].name)
-                console.log();
-                console.log();
-                console.log(key); // not problem
+            {(listNames && lastTodos) && Object.keys(listNames).map((key,i) => {    
                 if(lastTodos[i] && listNames[key].todos){
                     return <ListBox 
                     lastTodo={lastTodos[i]} 
@@ -145,6 +144,16 @@ const Home = ({userId,location}) => {
 }
 
 // { &&  listNames.constructor === Object && }
+// else if(lastTodos[i]){
+//     return <ListBox 
+//     lastTodo={''} 
+//     numberOfTodos={'0'} 
+//     listName={listNames[key].name} 
+//     userId={userId} key={i} 
+//     listKey={key} 
+//     className={setListBoxClass(i)}
+//     deleteList={deleteList}/>
+// }
 
 
 

@@ -6,14 +6,14 @@ const Signup = () => {
 
     const [redirect, updateRedirect] = useState();
 
-    const [username, updateUsername] = useState('');
+    // const [username, updateUsername] = useState('');
     const [email, updateEmail] = useState('');
     const [password, updatePassword] = useState('');
     const [passwordRepeat, updatePasswordRepeat] = useState('');
 
     const handleSignUp = () => {
         const emailTest = /\S+@\S+/;
-        if(username.length > 4 && emailTest.test(email) && password.length > 4 && password === passwordRepeat){
+        if(emailTest.test(email) && password.length > 4 && password === passwordRepeat){
             firebase.auth().createUserWithEmailAndPassword(email,password).then(()=>{
                 updateRedirect('/');
             }).catch(error => {
@@ -31,7 +31,6 @@ const Signup = () => {
             <div className='main-flex-container'>
             <Link className='form__home-button' to='/'> COLABI.CO </Link>
             <div className='signup__form'>
-                <input onChange={(e) => updateUsername(e.target.value)} className='signup__input' placeholder='Username'></input>
                 <input onChange={(e) => updateEmail(e.target.value)} className='signup__input' placeholder='Email'></input>
                 <input type='password' onChange={(e) => updatePassword(e.target.value)} className='signup__input' placeholder='Password'></input>
                 <input type='password' onChange={(e) => updatePasswordRepeat(e.target.value)} className='signup__input' placeholder='Repeat Password'></input>
@@ -47,5 +46,8 @@ const Signup = () => {
         );
     }
 }
+
+// <input onChange={(e) => updateUsername(e.target.value)} className='signup__input' placeholder='Username'></input>
+
 
 export default Signup;

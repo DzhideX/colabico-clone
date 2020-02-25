@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import edit from '../pictures/edit.png';
 import database, {firebase} from '../firebase/firebase';
 import { connect } from 'react-redux';
-import getUserData from '../redux/actions/action';
 import { Redirect } from 'react-router-dom';
 
 
@@ -104,7 +103,12 @@ const NewList = ({userId, todos, dispatch}) => {
                             updateRedirect(`/l/${res.getKey()}`);
                         });
                     }else{
-
+                        firebase.auth().signInAnonymously().then(() => {
+                            updateRedirect('/')
+                        }).catch(function(error) {
+                            var errorCode = error.code;
+                            console.log(errorCode);
+                        });
                     }
                 }} 
                 onFocus={onInputFocus} 

@@ -50,8 +50,8 @@
 
 .home__listbox--top{
     @extend .home__listbox;
-    border-top-right-radius: 0.2;
-    border-top-left-radius: 0.2;
+    border-top-right-radius: 0.2rem;
+    border-top-left-radius: 0.2rem;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
@@ -60,8 +60,8 @@
     @extend .home__listbox;
     border-top-right-radius: 0;
     border-top-left-radius: 0;
-    border-bottom-left-radius: 0.2;
-    border-bottom-right-radius: 0.2;
+    border-bottom-left-radius: 0.2rem;
+    border-bottom-right-radius: 0.2rem;
 }
 
 .home__listbox__data{

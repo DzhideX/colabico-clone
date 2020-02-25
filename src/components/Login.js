@@ -13,11 +13,6 @@ const Login = () => {
         console.log(email,password);
         firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
     .then(function() {
-        // Existing and future Auth states are now persisted in the current
-        // session only. Closing the window would clear any existing state even
-        // if a user forgets to sign out.
-        // ...
-        // New sign-in will be persisted with session persistence.
         return firebase.auth().signInWithEmailAndPassword(email, password).then(()=>{
             updateRedirect('/');
         }).catch(function(error) {
@@ -36,7 +31,7 @@ const Login = () => {
             <div className='main-flex-container'>
                 <Link className='form__home-button' to='/'> COLABI.CO </Link>
                 <div className='login__form'>
-                    <input onChange={(e)=>updateEmail(e.target.value)} className='login__input' placeholder='Username Or Email'></input>
+                    <input onChange={(e)=>updateEmail(e.target.value)} className='login__input' placeholder='Email'></input>
                     <input onChange={(e)=>updatePassword(e.target.value)} className='login__input' placeholder='Password' type='password'></input>
                     <div className='login__form__buttons'>
                         <button onClick={handleLogin} className='login__form__button'>LOGIN</button>

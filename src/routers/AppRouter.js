@@ -25,20 +25,22 @@ const Router = ({location, userId, setUserId}) => {
               // No user is signed in.
             }
           });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
 
     return (
         <React.Fragment>
             {location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/reset' && <Header/> }
+            {userId && (location.pathname === '/login' || location.pathname === '/signup' || location.pathname === '/reset') && <Header/> }
                 <Switch>
                     <Route path='/' component={Home} exact={true}/>
                     <Route path='/privacy' component={Privacy}/>
                     <Route path='/terms' component={Terms}/>
                     <Route path='/l/new' component={NewList} exact={true}/>
                     <Route path='/l/:id' component={List}/>
-                    <Route path='/login' component={Login} />
-                    <Route path='/reset' component={Reset}/>
-                    <Route path='/signup' component={Signup}/>
+                    {!userId && <Route path='/login' component={Login} />}
+                    {!userId && <Route path='/reset' component={Reset}/>}
+                    {!userId && <Route path='/signup' component={Signup}/>}
                     <Route path='/' component={NoRoute}/>
                 </Switch>
             <Footer />

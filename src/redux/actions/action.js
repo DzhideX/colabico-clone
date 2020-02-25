@@ -1,7 +1,6 @@
 import database from '../../firebase/firebase';
 
 const SET_USER_DATA = 'SET_USER_DATA';
-const SET_USER_DATA_ERROR = 'SET_USER_DATA_ERROR';
 
 const getUserData = (userId,listId) => {
     return  (dispatch) => {
@@ -10,10 +9,12 @@ const getUserData = (userId,listId) => {
             const todos = snapshot.val().todos;
             console.log(todos);
             dispatch({type: SET_USER_DATA, payload: {name: name, todos:todos}})
-        }).catch(error => {
-            // dispatch({type: SET_USER_DATA_ERROR, payload: 'error'});
         })
     }
 }
+
+// .catch(error => {
+//     // dispatch({type: SET_USER_DATA_ERROR, payload: 'error'});
+// })
 
 export default getUserData;
