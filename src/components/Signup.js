@@ -10,6 +10,7 @@ const Signup = () => {
     const [email, updateEmail] = useState('');
     const [password, updatePassword] = useState('');
     const [passwordRepeat, updatePasswordRepeat] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleSignUp = () => {
         const emailTest = /\S+@\S+/;
@@ -17,10 +18,16 @@ const Signup = () => {
             firebase.auth().createUserWithEmailAndPassword(email,password).then(()=>{
                 updateRedirect('/');
             }).catch(error => {
-                console.log(error);
+                setErrorMessage(error.message)
             });
         }else{
-            console.log('Hell naws, bruh!');
+            if(!emailTest.test(email)){
+                setErrorMessage("PLEASE ENTER A VALID EMAIL (EXAMPLE: SMOKEY@MAIL.COM)")
+            }else if(password.length <= 4){
+                setErrorMessage("PASSWORD IS TOO SHORT")
+            }else if(password !== passwordRepeat){
+                setErrorMessage("PASSWORDS DO NOT MATCH")
+            }
         }
     }
 
@@ -30,7 +37,8 @@ const Signup = () => {
         return (
             <div className='main-flex-container'>
             <Link className='form__home-button' to='/'> COLABI.CO </Link>
-            <div className='signup__form'>
+            <div className={errorMessage ? 'signup__form--error' : 'signup__form'}>
+                {errorMessage && <div className='signup__form__erromessage'> <p>{errorMessage}</p> </div>}
                 <input onChange={(e) => updateEmail(e.target.value)} className='signup__input' placeholder='Email'></input>
                 <input type='password' onChange={(e) => updatePassword(e.target.value)} className='signup__input' placeholder='Password'></input>
                 <input type='password' onChange={(e) => updatePasswordRepeat(e.target.value)} className='signup__input' placeholder='Repeat Password'></input>

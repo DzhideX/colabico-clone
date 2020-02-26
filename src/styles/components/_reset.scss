@@ -9,6 +9,24 @@
     padding-top: 1rem;
 }
 
+.reset__form--error{
+    @extend .reset__form;
+    height: 10.7rem;
+    padding-top: 0rem;
+}
+
+.reset__form__erromessage{
+    color: #fff;
+    font-size: 0.9rem;
+    padding: 1rem;
+    p{
+        text-align: center;
+        border: 0.05rem solid #ff1744;
+        border-radius: 0.2rem;
+        padding: 0.3rem;
+    }
+}
+
 .reset__input{
     height: 2.8rem;
     color:#fff;

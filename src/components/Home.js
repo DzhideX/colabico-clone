@@ -143,20 +143,6 @@ const Home = ({userId,location}) => {
     );
 }
 
-// { &&  listNames.constructor === Object && }
-// else if(lastTodos[i]){
-//     return <ListBox 
-//     lastTodo={''} 
-//     numberOfTodos={'0'} 
-//     listName={listNames[key].name} 
-//     userId={userId} key={i} 
-//     listKey={key} 
-//     className={setListBoxClass(i)}
-//     deleteList={deleteList}/>
-// }
-
-
-
 const mapStateToProps = state => ({
     userId: state.userId,
     todos: state.todos,

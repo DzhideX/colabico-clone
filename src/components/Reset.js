@@ -6,6 +6,7 @@ const Reset = () => {
 
     const [email, updateEmail] = useState('');
     const [emailSent, updateEmailSent] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleReset = () => {
         const emailTest = /\S+@\S+/;
@@ -14,8 +15,10 @@ const Reset = () => {
                 console.log('email sent!');
                 updateEmailSent(true);
               }).catch(function(error) {
-                // An error happened.
+                setErrorMessage(error.message);
               });
+        }else{
+            setErrorMessage("PLEASE ENTER A VALID EMAIL (EXAMPLE: SMOKEY@MAIL.COM)");
         }
     }
 
@@ -31,7 +34,8 @@ const Reset = () => {
         return (
             <div className='main-flex-container'>
         <Link className='form__home-button' to='/'> COLABI.CO </Link>
-        <div className='reset__form'>
+        <div className={errorMessage ? 'reset__form--error' : 'reset__form'}>
+            {errorMessage && <div className='reset__form__erromessage'><p>{errorMessage}</p></div>}
             <input onChange={(e) => updateEmail(e.target.value)} className='reset__input' placeholder='Email'></input>
             <div className='reset__form__buttons'>
                 <button onClick={handleReset} to='/reset' className='login__form__button '>CONTINUE</button>

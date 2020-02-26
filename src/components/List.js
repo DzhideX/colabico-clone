@@ -9,7 +9,7 @@ const List = ({userId, todos, dispatch, location, listNameRedux}) => {
 
     useEffect(() => {
         if(userId){ 
-            dispatch(getUserData(userId, location.pathname.split('/')[2])); //ovdje treba id
+            dispatch(getUserData(userId, location.pathname.split('/')[2]));
         }else if(userId === ''){
             updateTodoObject({});
         }
@@ -35,7 +35,6 @@ const List = ({userId, todos, dispatch, location, listNameRedux}) => {
         }
     },[listNameRedux]);
     
-    // const [numberOfRenderedTodos,updateNumberOfRenderedTodos] = useState(0);
     let numberOfRenderedTodos = 0;
     const [listName, setListName ] = useState('');
     const [listNameState, setListNameState] = useState('button');
@@ -74,7 +73,6 @@ const List = ({userId, todos, dispatch, location, listNameRedux}) => {
     const handleInputKeyPress = (e) => {
         if(e.key === 'Enter'){
             if(userId){
-                // if(Object.entries(todoObject).length === 0 && todoObject.constructor === Object){
                 database.ref(`users/${userId}/${location.pathname.split('/')[2]}/todos`).push({'value':e.target.value, state: 'pending'});
                 dispatch(getUserData(userId,location.pathname.split('/')[2]));
             }
@@ -83,8 +81,8 @@ const List = ({userId, todos, dispatch, location, listNameRedux}) => {
     }
 
     const deleteListItem = (key) => {
-        database.ref(`users/${userId}/${location.pathname.split('/')[2]}/todos/${key}`).remove(); // ovdje treba list id
-        dispatch(getUserData(userId,location.pathname.split('/')[2]));// ovdje treba list id
+        database.ref(`users/${userId}/${location.pathname.split('/')[2]}/todos/${key}`).remove();
+        dispatch(getUserData(userId,location.pathname.split('/')[2]));
     }
 
     const updateParent = () => {

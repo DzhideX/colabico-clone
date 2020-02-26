@@ -20,7 +20,6 @@ const Header = ({userId,setUserId}) => {
                     updateUserAnonymous(user);
                 }
             } else {
-              // No user is signed in.
             }
           });
     },[userId]);
@@ -35,17 +34,14 @@ const Header = ({userId,setUserId}) => {
                 });
             }
           }).catch(function(error) {
-            // An error happened.
           });
     }
 
     const handleTwitter = () => {
-        // window.location.href='https://twitter.com/intent/tweet?text=Checkout%20https://colabi.co';
         window.open(
             'https://twitter.com/intent/tweet?text=Checkout%20https://colabi.co',
             '_tab' 
           );
-          window.open()
     }
 
     return(
