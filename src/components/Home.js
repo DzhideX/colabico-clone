@@ -85,7 +85,7 @@ const Home = ({userId,location}) => {
             setIsOpen(true);
             setTimeout(() => {
                 setIsOpen(false)
-            },7000);
+            },5000);
         }
     },[location])
 

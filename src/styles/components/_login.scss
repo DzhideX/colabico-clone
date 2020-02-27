@@ -28,6 +28,27 @@
     border-top-left-radius: 0.2rem;
     background-color:#292929;
     padding-top: 1rem;
+    @media(max-width: 375px){
+        width: 17rem;
+    }
+}
+
+.login__form--error{
+    @extend .login__form;
+    height: 14.5rem;
+    padding-top: 0rem;
+}
+
+.login__form__erromessage{
+    color: #fff;
+    font-size: 0.9rem;
+    padding: 1rem;
+    p{
+        text-align: center;
+        border: 0.05rem solid #ff1744;
+        border-radius: 0.2rem;
+        padding: 0.3rem;
+    }
 }
 
 .login__input{
@@ -48,6 +69,9 @@
     }
     &:hover{
         background-color: #4d4d4d;
+    }
+    @media(max-width: 375px){
+        width: 17rem;
     }
 }
 
@@ -113,5 +137,9 @@
         a{
             text-decoration: underline;
         }
+    }
+    @media(max-width: 375px){
+        width: 17rem;
+        font-size: 0.8rem;
     }
 }

@@ -8,6 +8,7 @@ const Login = () => {
 
     const [email, updateEmail] = useState('');
     const [password, updatePassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleLogin = () => {
         console.log(email,password);
@@ -16,11 +17,11 @@ const Login = () => {
         return firebase.auth().signInWithEmailAndPassword(email, password).then(()=>{
             updateRedirect('/');
         }).catch(function(error) {
-            console.log(error);
+            setErrorMessage(error.message);
         });
     })
     .catch(function(error) {
-        console.log(error);
+        setErrorMessage(error.message);
     });
     }
 
@@ -30,7 +31,8 @@ const Login = () => {
         return (
             <div className='main-flex-container'>
                 <Link className='form__home-button' to='/'> COLABI.CO </Link>
-                <div className='login__form'>
+                <div className={errorMessage ? 'login__form--error' : 'login__form'}>
+                    {errorMessage && <div className='login__form__erromessage'> <p>{errorMessage}</p> </div>}
                     <input onChange={(e)=>updateEmail(e.target.value)} className='login__input' placeholder='Email'></input>
                     <input onChange={(e)=>updatePassword(e.target.value)} className='login__input' placeholder='Password' type='password'></input>
                     <div className='login__form__buttons'>

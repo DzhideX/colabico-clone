@@ -32,6 +32,10 @@
     color: #535353;
     font-size: 1.1rem;
     margin-top: 3rem;
+    text-align: center;
+    @media(max-width: 375px){
+        width: 17rem;
+    }
 }
 
 .home__listbox{
@@ -45,6 +49,12 @@
     cursor: pointer;
     &:hover{
         background-color: #313131;
+    }
+    @media(max-width: 750px){
+        width: 30rem;
+    }
+    @media(max-width: 375px){
+        width: 17rem;
     }
 }
 

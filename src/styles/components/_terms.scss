@@ -24,6 +24,15 @@
     width: 42rem;
     flex:1;
     color:#D4D4D4;
+    @media(max-width: 750px){
+        width: 30rem;
+    }
+    @media(max-width: 650px){
+        width: 25rem;
+    }
+    @media(max-width: 375px){
+        width: 17rem;
+    }
 }
 
 .terms__title{

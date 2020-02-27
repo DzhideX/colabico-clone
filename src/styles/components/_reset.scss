@@ -7,6 +7,9 @@
     border-top-left-radius: 0.2rem;
     background-color:#292929;
     padding-top: 1rem;
+    @media(max-width: 375px){
+        width: 17rem;
+    }
 }
 
 .reset__form--error{
@@ -45,6 +48,9 @@
     }
     &:hover{
         background-color: #4d4d4d;
+    }
+    @media(max-width: 375px){
+        width: 17rem;
     }
 }
 
@@ -100,6 +106,10 @@
         a{
             text-decoration: underline;
         }
+    }
+    @media(max-width: 375px){
+        width: 17rem;
+        font-size: 0.8rem;
     }
 }
 

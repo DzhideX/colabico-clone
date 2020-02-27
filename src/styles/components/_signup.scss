@@ -7,12 +7,15 @@
     border-top-left-radius: 0.2rem;
     background-color:#292929;
     padding-top: 1rem;
+    @media(max-width: 375px){
+        width: 17rem;
+    }
 }
 
 .signup__form--error{
     @extend .signup__form;
     height: 16.5rem;
-    padding-top: 0rem;
+    padding-top: 0 ;
 }
 
 .signup__form__erromessage{
@@ -45,6 +48,9 @@
     }
     &:hover{
         background-color: #4d4d4d;
+    }
+    @media(max-width: 375px){
+        width: 17rem;
     }
 }
 
@@ -109,6 +115,10 @@
             text-decoration: underline;
         }
     }
+    @media(max-width: 375px){
+        width: 17rem;
+        font-size: 0.8rem;
+    }
 }
 
 .signup__form__terms{
@@ -120,5 +130,8 @@
     a{
         color: white;
         text-decoration: none;
+    }
+    @media(max-width: 375px){
+        width: 17rem;
     }
 }
