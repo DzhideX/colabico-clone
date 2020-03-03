@@ -89,20 +89,19 @@ const Home = ({ userId, location, listData, dispatch }) => {
 
   const setListBoxClass = key => {
     if (key === 0) {
-      return 'home__listbox--top';
+      return '--top';
     } else if (key + 1 === listData.length) {
-      return 'home__listbox--bottom';
+      return '--bottom';
     } else {
-      return 'home__listbox';
+      return '';
     }
   };
 
   const deleteList = listKey => {
-    // database.ref(`users/${userId}/${listKey}`).remove();
-    // db.collection(`users/${userId}/lists`).doc(listKey).delete();
-    // let tempObj = { ...listNames };
-    // delete tempObj[listKey];
-    // updateListNames(tempObj);
+    dispatch({
+      type: 'REQUEST_DELETE_LIST',
+      payload: { data: listData, key: listKey, userId },
+    });
   };
 
   return (
@@ -129,7 +128,8 @@ const Home = ({ userId, location, listData, dispatch }) => {
               userId={userId}
               key={i}
               listKey={list.id}
-              className={setListBoxClass(i)}
+              className={`home__listbox${setListBoxClass(i)}`}
+              deleteList={deleteList}
             />
           );
         })}

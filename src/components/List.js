@@ -1,88 +1,75 @@
-import React, { useState, useRef, useEffect } from 'react'
-import edit from '../pictures/edit.png'
-import ListItem from './ListItem'
-import database, { db } from '../firebase/firebase'
-import { connect } from 'react-redux'
-import getUserData from '../redux/actions/action'
+import React, { useState, useRef, useEffect } from 'react';
+import edit from '../pictures/edit.png';
+import ListItem from './ListItem';
+import { db } from '../firebase/firebase';
+import { connect } from 'react-redux';
+import getUserData from '../redux/actions/action';
 
 const List = ({ userId, todos, dispatch, location, listNameRedux }) => {
-  let numberOfRenderedTodos = 0
-  const [listName, setListName] = useState('')
-  const [listNameState, setListNameState] = useState('button')
-  const textInput = useRef()
-  const [currentTodo, updateCurrentTodo] = useState('')
-  const [todoObject, updateTodoObject] = useState({})
+  const [listName, setListName] = useState('');
+  const [listNameState, setListNameState] = useState('button');
+  const textInput = useRef();
+  const [currentTodo, updateCurrentTodo] = useState('');
   const [filters, updateFilters] = useState({
     done: true,
     working: true,
     pending: true,
-  })
+  });
 
   useEffect(() => {
     if (userId) {
-      dispatch(getUserData(userId, location.pathname.split('/')[2]))
+      dispatch({
+        type: 'REQUEST_TODO_DATA',
+        payload: { userId, listId: location.pathname.split('/')[2] },
+      });
     } else if (userId === '') {
-      updateTodoObject({})
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId])
-
-  useEffect(() => {
-    if (todos) {
-      updateTodoObject(todos)
-    } else {
-      updateTodoObject({})
-    }
-  }, [todos])
+  }, [userId]);
 
   useEffect(() => {
     if (listNameRedux && listNameRedux !== '0') {
-      setListName(listNameRedux)
+      setListName(listNameRedux);
     } else if (listNameRedux === '' || listNameRedux === '0') {
-      setListName('')
+      setListName('');
     }
-  }, [listNameRedux])
+  }, [listNameRedux]);
 
   const changeToInput = () => {
-    setListNameState('input')
+    setListNameState('input');
     setTimeout(() => {
-      textInput.current.focus()
-    }, 0)
-  }
+      textInput.current.focus();
+    }, 0);
+  };
 
   const onInputFocus = e => {
     if (listName === '') {
-      e.target.placeholder = 'NAMELESS'
+      e.target.placeholder = 'NAMELESS';
     } else {
-      e.target.placeholder = listName
+      e.target.placeholder = listName;
     }
-  }
+  };
 
   const onInputChange = e => {
-    setListName(e.target.value.toUpperCase())
+    setListName(e.target.value.toUpperCase());
     if (e.target.value === '') {
-      e.target.placeholder = 'NAMELESS'
+      e.target.placeholder = 'NAMELESS';
     }
-  }
+  };
 
   const handleInputKeyPress = e => {
     if (e.key === 'Enter') {
       if (userId) {
-        //firestore
-        let listId = location.pathname.split('/')[2]
-        // db.collection(`users/${userId}/lists/${location.pathname.split('/')[2]}/todos`).add({'value':e.target.value, state: 'pending'});
-        db.collection(`users/${userId}/lists/${listId}/todos`).add({
-          value: e.target.value,
-          state: 'pending',
-        })
-        // db.collection('users').doc(userId).collection('lists').doc(listId).add({value:e.target.value, state: 'pending'})
-        //realtime
-        // database.ref(`users/${userId}/${location.pathname.split('/')[2]}/todos`).push({value:e.target.value, state: 'pending'});
-        dispatch(getUserData(userId, location.pathname.split('/')[2]))
+        let listId = location.pathname.split('/')[2];
+        dispatch({
+          type: 'REQUEST_ADD_TODO',
+          payload: { userId, listId, todoValue: e.target.value },
+        });
+        // dispatch(getUserData(userId, location.pathname.split('/')[2]));
       }
-      updateCurrentTodo('')
+      updateCurrentTodo('');
     }
-  }
+  };
 
   const deleteListItem = key => {
     // database.ref(`users/${userId}/${location.pathname.split('/')[2]}/todos/${key}`).remove();
@@ -90,15 +77,15 @@ const List = ({ userId, todos, dispatch, location, listNameRedux }) => {
       `users/${userId}/lists/${location.pathname.split('/')[2]}/todos`,
     )
       .doc(key)
-      .delete()
-    dispatch(getUserData(userId, location.pathname.split('/')[2]))
-  }
+      .delete();
+    dispatch(getUserData(userId, location.pathname.split('/')[2]));
+  };
 
   const updateParent = () => {
-    dispatch(getUserData(userId, location.pathname.split('/')[2]))
+    dispatch(getUserData(userId, location.pathname.split('/')[2]));
     // console.log('parent updated');
     // console.log(todos);
-  }
+  };
 
   return (
     <div className="newlist">
@@ -126,27 +113,27 @@ const List = ({ userId, todos, dispatch, location, listNameRedux }) => {
       {listNameState === 'input' && (
         <input
           onBlur={e => {
-            e.persist()
-            setListNameState('button')
+            e.persist();
+            setListNameState('button');
             // console.log(`*${e.target.value}*`, e.target.value==='');
             if (e.target.value === '') {
               // database.ref(`users/${userId}/${location.pathname.split('/')[2]}/name`).set('0').then(res => {
               //     dispatch(getUserData(userId,location.pathname.split('/')[2]));
               // });
-              let listId = location.pathname.split('/')[2]
+              let listId = location.pathname.split('/')[2];
               db.collection(`users/${userId}/lists`)
                 .doc(listId)
-                .set({ name: e.target.value })
-              dispatch(getUserData(userId, location.pathname.split('/')[2]))
+                .set({ name: e.target.value });
+              dispatch(getUserData(userId, location.pathname.split('/')[2]));
             } else {
               // database.ref(`users/${userId}/${location.pathname.split('/')[2]}/name`).set(e.target.value).then(res => {
               //     dispatch(getUserData(userId,location.pathname.split('/')[2]));
               // });
-              let listId = location.pathname.split('/')[2]
+              let listId = location.pathname.split('/')[2];
               db.collection(`users/${userId}/lists`)
                 .doc(listId)
-                .set({ name: e.target.value })
-              dispatch(getUserData(userId, location.pathname.split('/')[2]))
+                .set({ name: e.target.value });
+              dispatch(getUserData(userId, location.pathname.split('/')[2]));
             }
           }}
           onFocus={onInputFocus}
@@ -194,39 +181,36 @@ const List = ({ userId, todos, dispatch, location, listNameRedux }) => {
         </button>
       </div>
       {/*eslint-disable-next-line array-callback-return*/}
-      {Object.keys(todoObject).map((key, i) => {
-        if (filters[todoObject[key].state]) {
-          ++numberOfRenderedTodos
-          console.log('list', todoObject[key].state)
+      {todos &&
+        todos.length !== 0 &&
+        todos.map((todo, i) => {
           return (
             <ListItem
               listId={location.pathname.split('/')[2]}
               userId={userId}
               deleteListItem={deleteListItem}
-              initialValue={todoObject[key].value}
-              initialState={todoObject[key].state}
-              key={key}
-              objectKey={key}
-              updateParent={updateParent}
+              initialValue={todo.value}
+              initialState={todo.state}
+              key={i}
+              objectKey={todo.id}
             />
-          )
-        }
-      })}
-      {numberOfRenderedTodos === 0 && (
+          );
+        })}
+      {todos.length === 0 && (
         <p className="newlist__errormessage">
           {' '}
           Select some or all 'show' preferences!{' '}
         </p>
       )}
     </div>
-  )
-}
+  );
+};
 
 //(todoObject[key].state === filters.working || todoObject[key].state === filters.done || todoObject[key].state === filters.pending)
 const mapStateToProps = state => ({
   userId: state.userId,
   todos: state.todos,
   listNameRedux: state.listName,
-})
+});
 
-export default connect(mapStateToProps)(List)
+export default connect(mapStateToProps)(List);

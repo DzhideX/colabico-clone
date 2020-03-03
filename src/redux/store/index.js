@@ -3,6 +3,9 @@ import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 import userIdSaga from '../saga/userIdSaga';
 import listDataSaga from '../saga/listDataSaga';
+import deleteListSaga from '../saga/deleteListSaga';
+import todosSaga from '../saga/todosSaga';
+import addTodoSaga from '../saga/addTodoSaga';
 
 import reducer from '../reducer/reducer';
 
@@ -16,5 +19,8 @@ const store = createStore(reducer, composeEnhancers(middleware));
 
 sagaMiddleware.run(userIdSaga);
 sagaMiddleware.run(listDataSaga);
+sagaMiddleware.run(deleteListSaga);
+sagaMiddleware.run(todosSaga);
+sagaMiddleware.run(addTodoSaga);
 
 export default store;
