@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import edit from '../pictures/edit.png';
-import database, {firebase} from '../firebase/firebase';
+import database, {firebase, db} from '../firebase/firebase';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
@@ -61,9 +61,13 @@ const NewList = ({userId, todos, dispatch}) => {
         e.persist();
         if(e.key === 'Enter'){
             if(userId){
-                database.ref(`users/${userId}`).push({'name':'0'}).then(res => {
-                    database.ref(`users/${userId}/${res.getKey()}/todos`).push({'value':e.target.value, state: 'pending'});
-                    updateRedirect(`/l/${res.getKey()}`);
+                // database.ref(`users/${userId}`).push({'name':'0'}).then(res => {
+                //     database.ref(`users/${userId}/${res.getKey()}/todos`).push({'value':e.target.value, state: 'pending'});
+                //     updateRedirect(`/l/${res.getKey()}`);
+                // });
+                db.collection(`users/${userId}/lists`).add({name: '0'}).then(docRef => {
+                    db.collection(`users/${userId}/lists/${docRef.id}/todos`).add({'value':e.target.value, state: 'pending'});
+                    updateRedirect(`/l/${docRef.id}`);
                 });
             }else{
                 firebase.auth().signInAnonymously().then(() => {
@@ -99,9 +103,18 @@ const NewList = ({userId, todos, dispatch}) => {
                 onBlur={(e) => {
                     setListNameState('button');
                     if(userId){
-                        database.ref(`users/${userId}`).push({'name':listName}).then(res => {
-                            updateRedirect(`/l/${res.getKey()}`);
-                        });
+                        // database.ref(`users/${userId}`).push({'name':listName}).then(res => {
+                        //     updateRedirect(`/l/${res.getKey()}`);
+                        // });
+                        if(listName === ''){
+                            db.collection(`users/${userId}/lists`).add({name: '0'}).then(docRef => {
+                                updateRedirect(`/l/${docRef.id}`);
+                            });
+                        }else{
+                            db.collection(`users/${userId}/lists`).add({name: listName}).then(docRef => {
+                                updateRedirect(`/l/${docRef.id}`);
+                            });
+                        }
                     }else{
                         firebase.auth().signInAnonymously().then(() => {
                             updateRedirect('/')

@@ -1,53 +1,53 @@
-.header{
-    min-height: 3rem;
-    background-color: #24242B;
+.header {
+  min-height: 3rem;
+  background-color: #24242b;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  &__button {
+    background: none;
+    color: white;
+    border-radius: 0.2rem;
+    height: 1.5rem;
+    width: 5rem;
     display: flex;
-    justify-content: space-evenly;
     align-items: center;
-    .header__button{
-        background: none;
-        color: white;
-        border-radius: 0.2rem;
-        height: 1.5rem;
-        width: 5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.85rem;
-        text-decoration: none;
+    justify-content: center;
+    font-size: 0.85rem;
+    text-decoration: none;
+  }
+  .header__right {
+    display: flex;
+    justify-content: center;
+  }
+  #header__colabico {
+    border: 1px solid #d500f9;
+    &:hover {
+      background-color: #d500f9;
     }
-    .header__right{
-        display: flex;
-        justify-content: center;
+  }
+  #header__tweet {
+    border: 1px solid #ff9100;
+    cursor: pointer;
+    &:hover {
+      background-color: #ff9100;
     }
-    #header__colabico{
-        border: 1px solid #D500F9;
-        &:hover{
-            background-color:  #D500F9;
-        }
+  }
+  #header__login {
+    border: 1px solid #2979ff;
+    margin-left: 1rem;
+    cursor: pointer;
+    &:hover {
+      background-color: #2979ff;
     }
-    #header__tweet{
-        border: 1px solid #FF9100;
-        cursor: pointer;
-        &:hover{
-            background-color:  #FF9100;
-        }
+  }
+  #header__logout {
+    border: 0.5px solid #616161;
+    margin-left: 1rem;
+    cursor: pointer;
+    &:hover {
+      background-color: white;
+      color: black;
     }
-    #header__login{
-        border: 1px solid #2979FF;
-        margin-left: 1rem;
-        cursor: pointer;
-        &:hover{
-            background-color:  #2979FF;
-        }
-    }
-    #header__logout{
-        border: 0.5px solid #616161;
-        margin-left: 1rem;
-        cursor: pointer;
-        &:hover{
-            background-color:  white;
-            color: black;
-        }
-    }
+  }
 }
