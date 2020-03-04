@@ -18,11 +18,38 @@ const reducer = (
       };
     case 'SET_LIST_DATA_SUCCESS':
       return { ...state, listData: [...action.payload.listData], todos: [] };
-    case 'DELETE_LIST_DATA_SUCCESS':
-      return { ...state, listData: action.payload.listData };
+    case 'DELETE_TODO_SUCCESS':
+      return {
+        ...state,
+        todos: state.todos.filter(todo => todo.id !== action.payload.key),
+      };
     case 'ADD_TODO_SUCCESS':
       console.log(action.payload.todo);
       return { ...state, todos: [...state.todos, action.payload.todo] };
+    case 'CHANGE_LIST_NAME_SUCCESS':
+      return { ...state, listName: action.payload.name };
+    case 'DELETE_LIST_DATA_SUCCESS':
+      return { ...state, listData: action.payload.listData };
+    case 'SET_TODO_STATE_SUCCESS':
+      return {
+        ...state,
+        todos: state.todos.map(todo => {
+          if (action.payload.todoId === todo.id) {
+            todo.state = action.payload.desiredState;
+          }
+          return todo;
+        }),
+      };
+    case 'SET_TODO_VALUE_SUCCESS':
+      return {
+        ...state,
+        todos: state.todos.map(todo => {
+          if (action.payload.todoId === todo.id) {
+            todo.value = action.payload.value;
+          }
+          return todo;
+        }),
+      };
     default:
       return state;
   }

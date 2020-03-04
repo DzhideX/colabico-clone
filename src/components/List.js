@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import edit from '../pictures/edit.png';
 import ListItem from './ListItem';
-import { db } from '../firebase/firebase';
 import { connect } from 'react-redux';
-import getUserData from '../redux/actions/action';
 
 const List = ({ userId, todos, dispatch, location, listNameRedux }) => {
   const [listName, setListName] = useState('');
@@ -61,30 +59,20 @@ const List = ({ userId, todos, dispatch, location, listNameRedux }) => {
     if (e.key === 'Enter') {
       if (userId) {
         let listId = location.pathname.split('/')[2];
-        dispatch({
-          type: 'REQUEST_ADD_TODO',
-          payload: { userId, listId, todoValue: e.target.value },
-        });
-        // dispatch(getUserData(userId, location.pathname.split('/')[2]));
+        if (e.target.value) {
+          dispatch({
+            type: 'REQUEST_ADD_TODO',
+            payload: { userId, listId, todoValue: e.target.value },
+          });
+        }
       }
       updateCurrentTodo('');
     }
   };
 
   const deleteListItem = key => {
-    // database.ref(`users/${userId}/${location.pathname.split('/')[2]}/todos/${key}`).remove();
-    db.collection(
-      `users/${userId}/lists/${location.pathname.split('/')[2]}/todos`,
-    )
-      .doc(key)
-      .delete();
-    dispatch(getUserData(userId, location.pathname.split('/')[2]));
-  };
-
-  const updateParent = () => {
-    dispatch(getUserData(userId, location.pathname.split('/')[2]));
-    // console.log('parent updated');
-    // console.log(todos);
+    let listId = location.pathname.split('/')[2];
+    dispatch({ type: 'REQUEST_DELETE_TODO', payload: { userId, listId, key } });
   };
 
   return (
@@ -115,26 +103,11 @@ const List = ({ userId, todos, dispatch, location, listNameRedux }) => {
           onBlur={e => {
             e.persist();
             setListNameState('button');
-            // console.log(`*${e.target.value}*`, e.target.value==='');
-            if (e.target.value === '') {
-              // database.ref(`users/${userId}/${location.pathname.split('/')[2]}/name`).set('0').then(res => {
-              //     dispatch(getUserData(userId,location.pathname.split('/')[2]));
-              // });
-              let listId = location.pathname.split('/')[2];
-              db.collection(`users/${userId}/lists`)
-                .doc(listId)
-                .set({ name: e.target.value });
-              dispatch(getUserData(userId, location.pathname.split('/')[2]));
-            } else {
-              // database.ref(`users/${userId}/${location.pathname.split('/')[2]}/name`).set(e.target.value).then(res => {
-              //     dispatch(getUserData(userId,location.pathname.split('/')[2]));
-              // });
-              let listId = location.pathname.split('/')[2];
-              db.collection(`users/${userId}/lists`)
-                .doc(listId)
-                .set({ name: e.target.value });
-              dispatch(getUserData(userId, location.pathname.split('/')[2]));
-            }
+            let listId = location.pathname.split('/')[2];
+            dispatch({
+              type: 'REQUEST_CHANGE_LIST_NAME',
+              payload: { userId, listId, value: e.target.value },
+            });
           }}
           onFocus={onInputFocus}
           placeholder="(NAME THIS LIST)"
@@ -183,23 +156,26 @@ const List = ({ userId, todos, dispatch, location, listNameRedux }) => {
       {/*eslint-disable-next-line array-callback-return*/}
       {todos &&
         todos.length !== 0 &&
-        todos.map((todo, i) => {
-          return (
-            <ListItem
-              listId={location.pathname.split('/')[2]}
-              userId={userId}
-              deleteListItem={deleteListItem}
-              initialValue={todo.value}
-              initialState={todo.state}
-              key={i}
-              objectKey={todo.id}
-            />
-          );
+        todos.map(todo => {
+          if (filters[todo.state]) {
+            return (
+              <ListItem
+                listId={location.pathname.split('/')[2]}
+                userId={userId}
+                deleteListItem={deleteListItem}
+                initialValue={todo.value}
+                initialState={todo.state}
+                key={todo.id}
+                todoId={todo.id}
+                dispatch={dispatch}
+              />
+            );
+          }
         })}
       {todos.length === 0 && (
         <p className="newlist__errormessage">
           {' '}
-          Select some or all 'show' preferences!{' '}
+          Add todos or edit preferences to show todos!{' '}
         </p>
       )}
     </div>

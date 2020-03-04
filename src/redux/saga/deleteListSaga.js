@@ -18,7 +18,6 @@ function deleteList(list) {
 function* handleDeleteList(action) {
   try {
     let response = yield call(deleteList, action.payload);
-    console.log(response);
     yield put({
       type: 'DELETE_LIST_DATA_SUCCESS',
       payload: {

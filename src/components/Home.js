@@ -126,7 +126,7 @@ const Home = ({ userId, location, listData, dispatch }) => {
               numberOfTodos={list.numberOfTodos}
               listName={list.name}
               userId={userId}
-              key={i}
+              key={list.id}
               listKey={list.id}
               className={`home__listbox${setListBoxClass(i)}`}
               deleteList={deleteList}

@@ -5,14 +5,14 @@ import database, { db } from '../firebase/firebase';
 const ListItem = ({
   initialValue,
   deleteListItem,
-  objectKey,
+  todoId,
   userId,
   listId,
   updateParent,
   initialState,
+  dispatch,
 }) => {
   const [done, setDone] = useState(false);
-  const [todoState, updateTodoState] = useState('pending');
   const [listItemState, setListItemState] = useState('text');
   const [listItemValue, setListItemValue] = useState(initialValue);
   const [copyIconColor, setCopyIconColor] = useState('white');
@@ -20,29 +20,10 @@ const ListItem = ({
   const textInput = useRef();
 
   useEffect(() => {
-    // db.collection(`users/${userId}/lists/${listId}/todos`)
-    //   .doc(objectKey)
-    //   .get()
-    //   .then(snapshot => {
-    //     if (snapshot.data() && snapshot.data().state === 'done') {
-    //       setDone(true)
-    //     }
-    //     console.log(snapshot.data().state)
-    //     updateTodoState(snapshot.data().state)
-    //   })
-    // console.log('componented rerendered')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updateParent]);
-
-  // useEffect(() => {
-  //     if(initialState){
-  //         console.log('listItem',initialState);
-  //         if(initialState === 'done'){
-  //             setDone(true);
-  //         }
-  //         updateTodoState(initialState);
-  //     }
-  // },[initialState]);
+    if (initialState && initialState === 'done') {
+      setDone(true);
+    }
+  }, [initialState]);
 
   const changeToInput = () => {
     setListItemState('input');
@@ -52,17 +33,17 @@ const ListItem = ({
   };
 
   const setTodoState = desiredState => {
-    // database.ref(`users/${userId}/${listId}/todos/${objectKey}/state`).set(desiredState);
-    db.collection(`users/${userId}/lists/${listId}/todos`)
-      .doc(objectKey)
-      .set({ state: desiredState }, { merge: true });
-    updateParent();
-    console.log('parent updated');
+    dispatch({
+      type: 'REQUEST_SET_TODO_STATE',
+      payload: { userId, listId, todoId, desiredState },
+    });
   };
 
   return (
     <div
-      className={todoState === 'working' ? 'list-item--working' : 'list-item'}
+      className={
+        initialState === 'working' ? 'list-item--working' : 'list-item'
+      }
     >
       {listItemState === 'text' && (
         <React.Fragment>
@@ -112,10 +93,10 @@ const ListItem = ({
               onMouseOver={() => setTrashIconColor('black')}
               onMouseLeave={() => setTrashIconColor('white')}
               onClick={() => {
-                deleteListItem(objectKey);
+                deleteListItem(todoId);
               }}
             />
-            {todoState === 'pending' && (
+            {initialState === 'pending' && (
               <button
                 className="list-item__right__button"
                 onClick={() => {
@@ -125,7 +106,7 @@ const ListItem = ({
                 START
               </button>
             )}
-            {todoState === 'working' && (
+            {initialState === 'working' && (
               <button
                 className="list-item__right__button--stop"
                 onClick={() => {
@@ -143,9 +124,10 @@ const ListItem = ({
           className="list-item__input"
           onBlur={e => {
             setListItemState('text');
-            db.collection(`users/${userId}/lists/${listId}/todos`)
-              .doc(objectKey)
-              .set({ value: e.target.value }, { merge: true });
+            dispatch({
+              type: 'REQUEST_SET_TODO_VALUE',
+              payload: { userId, listId, todoId, value: e.target.value },
+            });
           }}
           ref={textInput}
           value={listItemValue}

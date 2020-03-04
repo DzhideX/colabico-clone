@@ -9,8 +9,11 @@ function addTodo({ userId, listId, todoValue }) {
   return new Promise((resolve, reject) => {
     db.collection(`users/${userId}/lists/${listId}/todos`)
       .add(addedTodo)
-      .then(() => {
-        resolve(addedTodo);
+      .then(docRef => {
+        resolve({ ...addedTodo, id: docRef.id });
+      })
+      .catch(e => {
+        reject(e);
       });
   });
 }
