@@ -3,7 +3,7 @@ import edit from '../pictures/edit.png';
 import ListItem from './ListItem';
 import { connect } from 'react-redux';
 
-const List = ({ userId, todos, dispatch, location, listNameRedux }) => {
+const List = ({ userId, todos, dispatch, location, listNameRedux, action }) => {
   const [listName, setListName] = useState('');
   const [listNameState, setListNameState] = useState('button');
   const textInput = useRef();
@@ -15,6 +15,13 @@ const List = ({ userId, todos, dispatch, location, listNameRedux }) => {
   });
 
   useEffect(() => {
+    if (action) {
+      console.log(action);
+    }
+  }, [action]);
+
+  useEffect(() => {
+    console.log('list mounted');
     if (userId) {
       dispatch({
         type: 'REQUEST_TODO_DATA',
@@ -184,9 +191,10 @@ const List = ({ userId, todos, dispatch, location, listNameRedux }) => {
 
 //(todoObject[key].state === filters.working || todoObject[key].state === filters.done || todoObject[key].state === filters.pending)
 const mapStateToProps = state => ({
-  userId: state.userId,
-  todos: state.todos,
-  listNameRedux: state.listName,
+  userId: state.reducer.userId,
+  todos: state.reducer.todos,
+  listNameRedux: state.reducer.listName,
+  action: state.router.action,
 });
 
 export default connect(mapStateToProps)(List);

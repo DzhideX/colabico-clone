@@ -13,21 +13,22 @@ import Reset from '../components/Reset';
 import List from '../components/List';
 import { connect } from 'react-redux';
 
-const Router = ({ location, userId, dispatch }) => {
+const Router = ({ userId, pathname, dispatch }) => {
   useEffect(() => {
     dispatch({ type: 'REQUEST_USER_ID' });
+    // console.log(userId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <React.Fragment>
-      {location.pathname !== '/login' &&
-        location.pathname !== '/signup' &&
-        location.pathname !== '/reset' && <Header />}
+      {pathname !== '/login' &&
+        pathname !== '/signup' &&
+        pathname !== '/reset' && <Header />}
       {userId &&
-        (location.pathname === '/login' ||
-          location.pathname === '/signup' ||
-          location.pathname === '/reset') && <Header />}
+        (pathname === '/login' ||
+          pathname === '/signup' ||
+          pathname === '/reset') && <Header />}
       <Switch>
         <Route path="/" component={Home} exact={true} />
         <Route path="/privacy" component={Privacy} />
@@ -44,17 +45,16 @@ const Router = ({ location, userId, dispatch }) => {
   );
 };
 
-const mapStateToProps = state => ({
-  userId: state.userId,
-  todos: state.todos,
-});
+const mapStateToProps = state => {
+  return {
+    userId: state.reducer.userId,
+    todos: state.reducer.todos,
+    pathname: state.router.location.pathname,
+  };
+};
 
 const RouterWithHistory = connect(mapStateToProps)(withRouter(Router));
 
-const AppRouter = () => (
-  <BrowserRouter>
-    <RouterWithHistory />
-  </BrowserRouter>
-);
+const AppRouter = () => <RouterWithHistory />;
 
 export default AppRouter;

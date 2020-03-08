@@ -81,7 +81,7 @@ const Header = ({ userId, dispatch }) => {
 };
 
 const mapStateToProps = state => ({
-  userId: state.userId,
+  userId: state.reducer.userId,
 });
 
 export default connect(mapStateToProps)(Header);

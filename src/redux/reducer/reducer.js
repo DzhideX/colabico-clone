@@ -4,6 +4,7 @@ const reducer = (
     listData: [],
     todos: [],
     listName: '',
+    status: '',
   },
   action,
 ) => {
@@ -50,6 +51,12 @@ const reducer = (
           return todo;
         }),
       };
+    case 'ADD_LIST_SUCCESS':
+      if (action.payload.type === 'todo') {
+        return { ...state, todos: [...state.todos, action.payload.todo] };
+      } else if (action.payload.type === 'name') {
+        return { ...state, listName: action.payload.listName };
+      }
     default:
       return state;
   }

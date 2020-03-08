@@ -5,28 +5,11 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
 const NewList = ({ userId, todos, dispatch }) => {
-  useEffect(() => {
-    if (userId) {
-      console.log('/l/new');
-    } else if (userId === '') {
-    }
-  }, [userId]);
-
-  useEffect(() => {
-    if (todos) {
-    } else {
-      console.log('no-todos');
-    }
-  }, [todos]);
-
   const [redirect, updateRedirect] = useState();
-
   const [listName, setListName] = useState('');
   const [listNameState, setListNameState] = useState('button');
   const textInput = useRef();
-
   const [currentTodo, updateCurrentTodo] = useState('');
-  // const [todoObject, updateTodoObject] = useState({});
   const [filters, updateFilters] = useState({
     done: true,
     working: true,
@@ -59,19 +42,10 @@ const NewList = ({ userId, todos, dispatch }) => {
     e.persist();
     if (e.key === 'Enter') {
       if (userId) {
-        // database.ref(`users/${userId}`).push({'name':'0'}).then(res => {
-        //     database.ref(`users/${userId}/${res.getKey()}/todos`).push({'value':e.target.value, state: 'pending'});
-        //     updateRedirect(`/l/${res.getKey()}`);
-        // });
-        db.collection(`users/${userId}/lists`)
-          .add({ name: '0' })
-          .then(docRef => {
-            db.collection(`users/${userId}/lists/${docRef.id}/todos`).add({
-              value: e.target.value,
-              state: 'pending',
-            });
-            updateRedirect(`/l/${docRef.id}`);
-          });
+        dispatch({
+          type: 'REQUEST_ADD_LIST',
+          payload: { userId, value: e.target.value },
+        });
       } else {
         firebase
           .auth()
@@ -126,22 +100,10 @@ const NewList = ({ userId, todos, dispatch }) => {
             onBlur={e => {
               setListNameState('button');
               if (userId) {
-                // database.ref(`users/${userId}`).push({'name':listName}).then(res => {
-                //     updateRedirect(`/l/${res.getKey()}`);
-                // });
-                if (listName === '') {
-                  db.collection(`users/${userId}/lists`)
-                    .add({ name: '0' })
-                    .then(docRef => {
-                      updateRedirect(`/l/${docRef.id}`);
-                    });
-                } else {
-                  db.collection(`users/${userId}/lists`)
-                    .add({ name: listName })
-                    .then(docRef => {
-                      updateRedirect(`/l/${docRef.id}`);
-                    });
-                }
+                dispatch({
+                  type: 'REQUEST_ADD_LIST',
+                  payload: { userId, name: listName === '' ? '0' : listName },
+                });
               } else {
                 firebase
                   .auth()
@@ -205,8 +167,8 @@ const NewList = ({ userId, todos, dispatch }) => {
 };
 
 const mapStateToProps = state => ({
-  userId: state.userId,
-  todos: state.todos,
+  userId: state.reducer.userId,
+  todos: state.reducer.todos,
 });
 
 export default connect(mapStateToProps)(NewList);

@@ -144,9 +144,9 @@ const Home = ({ userId, location, listData, dispatch }) => {
 };
 
 const mapStateToProps = state => ({
-  userId: state.userId,
-  todos: state.todos,
-  listData: state.listData,
+  userId: state.reducer.userId,
+  todos: state.reducer.todos,
+  listData: state.reducer.listData,
 });
 
 export default connect(mapStateToProps)(Home);

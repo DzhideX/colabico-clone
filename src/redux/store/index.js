@@ -1,6 +1,7 @@
-import { createStore, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk';
-import createSagaMiddleware from 'redux-saga';
+//--------------------------------------------
+//:: IMPORTS FROM SAGA
+//--------------------------------------------
+
 import userIdSaga from '../saga/userIdSaga';
 import listDataSaga from '../saga/listDataSaga';
 import deleteListSaga from '../saga/deleteListSaga';
@@ -10,25 +11,63 @@ import deleteTodoSaga from '../saga/deleteTodoSaga';
 import changeListNameSaga from '../saga/changeListNameSaga';
 import setTodoStateSaga from '../saga/setTodoStateSaga';
 import setTodoValueSaga from '../saga/setTodoValueSaga';
-
+import addListSaga from '../saga/addListSaga';
 import reducer from '../reducer/reducer';
 
+//--------------------------------------------
+//:: IMPORTS FROM NPM PACKAGES
+//--------------------------------------------
+
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import createSagaMiddleware from 'redux-saga';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
+import { createBrowserHistory } from 'history';
+
+//--------------------------------------------
+//:: SETTING UP ROOT REDUCER
+//--------------------------------------------
+
+const createRootReducer = history =>
+  combineReducers({
+    router: connectRouter(history),
+    reducer, // possible error?
+  });
+
+//--------------------------------------------
+//:: SETUP OF THE MIDDLEWARE
+//--------------------------------------------
+
 const sagaMiddleware = createSagaMiddleware();
-
+export const history = createBrowserHistory();
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-// const middleware = applyMiddleware(thunk) //logger
-const middleware = applyMiddleware(thunk, sagaMiddleware); //logger
 
-const store = createStore(reducer, composeEnhancers(middleware));
+//--------------------------------------------
+//:: SETUP OF THE STATE
+//--------------------------------------------
 
-sagaMiddleware.run(userIdSaga);
-sagaMiddleware.run(listDataSaga);
-sagaMiddleware.run(deleteListSaga);
-sagaMiddleware.run(todosSaga);
-sagaMiddleware.run(addTodoSaga);
-sagaMiddleware.run(deleteTodoSaga);
-sagaMiddleware.run(changeListNameSaga);
-sagaMiddleware.run(setTodoStateSaga);
-sagaMiddleware.run(setTodoValueSaga);
+// const store = createStore(reducer, composeEnhancers(middleware));
 
-export default store;
+export default function configureStore(preloadedState) {
+  const store = createStore(
+    createRootReducer(history),
+    preloadedState,
+    composeEnhancers(
+      applyMiddleware(routerMiddleware(history), sagaMiddleware),
+    ),
+  );
+
+  sagaMiddleware.run(userIdSaga);
+  sagaMiddleware.run(listDataSaga);
+  sagaMiddleware.run(deleteListSaga);
+  sagaMiddleware.run(todosSaga);
+  sagaMiddleware.run(addTodoSaga);
+  sagaMiddleware.run(deleteTodoSaga);
+  sagaMiddleware.run(changeListNameSaga);
+  sagaMiddleware.run(setTodoStateSaga);
+  sagaMiddleware.run(setTodoValueSaga);
+  sagaMiddleware.run(addListSaga);
+
+  return store;
+}
+
+// export default store;
