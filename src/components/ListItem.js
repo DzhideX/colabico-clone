@@ -93,6 +93,9 @@ const ListItem = ({
               color={copyIconColor}
               onMouseOver={() => setCopyIconColor('black')}
               onMouseLeave={() => setCopyIconColor('white')}
+              onClick={e => {
+                navigator.clipboard.writeText(listItemValue);
+              }}
             />
             {userId && (
               <Trash2
