@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Trash2 } from 'react-feather';
 import Modal from 'react-modal';
+import { replace } from 'connected-react-router';
 
 const ListBox = ({
   listName,
@@ -82,8 +83,9 @@ const Home = ({ userId, location, listData, dispatch }) => {
     if (location.state) {
       setIsOpen(true);
       setTimeout(() => {
+        dispatch(replace('/', null));
         setIsOpen(false);
-      }, 5000);
+      }, 3000);
     }
   }, [location]);
 
@@ -147,6 +149,7 @@ const mapStateToProps = state => ({
   userId: state.reducer.userId,
   todos: state.reducer.todos,
   listData: state.reducer.listData,
+  location: state.router.location,
 });
 
 export default connect(mapStateToProps)(Home);

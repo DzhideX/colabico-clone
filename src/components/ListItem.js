@@ -42,13 +42,19 @@ const ListItem = ({
   return (
     <div
       className={
-        initialState === 'working' ? 'list-item--working' : 'list-item'
+        initialState === 'working' && !userId
+          ? 'list-item--working--no-id'
+          : initialState === 'working'
+          ? 'list-item--working'
+          : !userId
+          ? 'list-item--no-id'
+          : 'list-item'
       }
     >
       {listItemState === 'text' && (
         <React.Fragment>
           <div className="list-item__left">
-            {!done ? (
+            {userId && !done ? (
               <Square
                 className="list-item__left__square"
                 size={24}
@@ -59,21 +65,23 @@ const ListItem = ({
                 }}
               />
             ) : (
-              <CheckSquare
-                className="list-item__left__square"
-                size={24}
-                color="#4caf50"
-                onClick={() => {
-                  setDone(!done);
-                  setTodoState('pending');
-                }}
-              />
+              userId && (
+                <CheckSquare
+                  className="list-item__left__square"
+                  size={24}
+                  color="#4caf50"
+                  onClick={() => {
+                    setDone(!done);
+                    setTodoState('pending');
+                  }}
+                />
+              )
             )}
             <p
               className={
                 done ? 'list-item__left__text--done' : 'list-item__left__text'
               }
-              onClick={changeToInput}
+              onClick={userId ? changeToInput : null}
             >
               {listItemValue}
             </p>
@@ -86,17 +94,19 @@ const ListItem = ({
               onMouseOver={() => setCopyIconColor('black')}
               onMouseLeave={() => setCopyIconColor('white')}
             />
-            <Trash2
-              className="list-item__right__trash"
-              size={13}
-              color={trashIconColor}
-              onMouseOver={() => setTrashIconColor('black')}
-              onMouseLeave={() => setTrashIconColor('white')}
-              onClick={() => {
-                deleteListItem(todoId);
-              }}
-            />
-            {initialState === 'pending' && (
+            {userId && (
+              <Trash2
+                className="list-item__right__trash"
+                size={13}
+                color={trashIconColor}
+                onMouseOver={() => setTrashIconColor('black')}
+                onMouseLeave={() => setTrashIconColor('white')}
+                onClick={() => {
+                  deleteListItem(todoId);
+                }}
+              />
+            )}
+            {userId && initialState === 'pending' && (
               <button
                 className="list-item__right__button"
                 onClick={() => {
@@ -109,9 +119,13 @@ const ListItem = ({
             {initialState === 'working' && (
               <button
                 className="list-item__right__button--stop"
-                onClick={() => {
-                  setTodoState('pending');
-                }}
+                onClick={
+                  userId
+                    ? () => {
+                        setTodoState('pending');
+                      }
+                    : null
+                }
               >
                 STOP
               </button>

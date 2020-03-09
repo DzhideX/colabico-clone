@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { firebase } from '../firebase/firebase';
+import { firebase, db } from '../firebase/firebase';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
@@ -41,8 +41,11 @@ const Signup = () => {
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(() => {
+        .then(res => {
           updateRedirect('/');
+          db.collection(`users`)
+            .doc(res.user.uid)
+            .set({ state: 'user' });
         })
         .catch(error => {
           setErrorMessage(error.message);

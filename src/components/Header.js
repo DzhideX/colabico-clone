@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { firebase } from '../firebase/firebase';
+import { firebase, db } from '../firebase/firebase';
 
 const Header = ({ userId, dispatch }) => {
   const [userState, setUserState] = useState('');
@@ -28,15 +28,15 @@ const Header = ({ userId, dispatch }) => {
       .auth()
       .signOut()
       .then(function() {
+        db.collection(`users`)
+          .doc(userId)
+          .delete();
         window.location.href = '/';
         dispatch({ type: 'REQUEST_USER_ID' });
         if (userAnonymous) {
-          userAnonymous
-            .delete()
-            .then(() => {})
-            .catch(err => {
-              console.log(err);
-            });
+          userAnonymous.delete().catch(err => {
+            console.log(err);
+          });
         }
       })
       .catch(function(error) {});

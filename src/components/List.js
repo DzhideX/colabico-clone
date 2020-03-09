@@ -15,19 +15,16 @@ const List = ({ userId, todos, dispatch, location, listNameRedux, action }) => {
   });
 
   useEffect(() => {
-    if (action) {
-      console.log(action);
-    }
-  }, [action]);
-
-  useEffect(() => {
-    console.log('list mounted');
     if (userId) {
       dispatch({
         type: 'REQUEST_TODO_DATA',
         payload: { userId, listId: location.pathname.split('/')[2] },
       });
     } else if (userId === '') {
+      dispatch({
+        type: 'REQUEST_TODO_DATA',
+        payload: { listId: location.pathname.split('/')[2] },
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
@@ -85,7 +82,10 @@ const List = ({ userId, todos, dispatch, location, listNameRedux, action }) => {
   return (
     <div className="newlist">
       {listNameState === 'button' && (
-        <button onClick={changeToInput} className="newlist__placeholder">
+        <button
+          onClick={!userId ? null : changeToInput}
+          className="newlist__placeholder"
+        >
           <div className="newlist__placeholder__area">
             <p
               className={
@@ -97,14 +97,17 @@ const List = ({ userId, todos, dispatch, location, listNameRedux, action }) => {
               {' '}
               {listName === '' ? '(NAME THIS LIST)' : listName}
             </p>
-            <img
-              className="newlist__placeholder__area__icon"
-              src={edit}
-              alt="edit icon"
-            ></img>
+            {userId && (
+              <img
+                className="newlist__placeholder__area__icon"
+                src={edit}
+                alt="edit icon"
+              ></img>
+            )}
           </div>
         </button>
-      )}
+      )}{' '}
+      {/* REPLACE THIS WITH STATIC VALUE*/}
       {listNameState === 'input' && (
         <input
           onBlur={e => {
@@ -124,15 +127,22 @@ const List = ({ userId, todos, dispatch, location, listNameRedux, action }) => {
           ref={textInput}
         ></input>
       )}
-      <input
-        type="text"
-        className="newlist__taskinput"
-        placeholder="Add a new task..."
-        value={currentTodo}
-        onChange={e => updateCurrentTodo(e.target.value)}
-        onKeyPress={handleInputKeyPress}
-      ></input>
-      <div className="newlist__filterarea">
+      {userId && (
+        <input
+          type="text"
+          className="newlist__taskinput"
+          placeholder="Add a new task..."
+          value={currentTodo}
+          onChange={e => updateCurrentTodo(e.target.value)}
+          onKeyPress={handleInputKeyPress}
+        ></input>
+      )}{' '}
+      {/* COMPLETELY GET RID OF THIS INPUT */}
+      <div
+        className={
+          userId ? 'newlist__filterarea' : 'newlist__filterarea--dropped'
+        }
+      >
         <p>Show:</p>
         <button
           onClick={e => updateFilters({ ...filters, done: !filters.done })}
@@ -164,6 +174,7 @@ const List = ({ userId, todos, dispatch, location, listNameRedux, action }) => {
       {todos &&
         todos.length !== 0 &&
         todos.map(todo => {
+          // LIST COMPLETELY DIFFERENT ITEM
           if (filters[todo.state]) {
             return (
               <ListItem

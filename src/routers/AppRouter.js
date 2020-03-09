@@ -16,7 +16,6 @@ import { connect } from 'react-redux';
 const Router = ({ userId, pathname, dispatch }) => {
   useEffect(() => {
     dispatch({ type: 'REQUEST_USER_ID' });
-    // console.log(userId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
