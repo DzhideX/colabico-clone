@@ -3,8 +3,10 @@ import { Link, Redirect } from 'react-router-dom';
 import { firebase, db } from '../firebase/firebase';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
+import { push } from 'connected-react-router';
+import { connect } from 'react-redux';
 
-const Signup = () => {
+const Signup = ({ dispatch }) => {
   const validationSchema = yup.object().shape({
     email: yup
       .string()
@@ -42,7 +44,9 @@ const Signup = () => {
         .auth()
         .createUserWithEmailAndPassword(email, password)
         .then(res => {
-          updateRedirect('/');
+          // updateRedirect('/');
+          dispatch(push('/'));
+          dispatch({ type: 'REQUEST_USER_ID' });
           db.collection(`users`)
             .doc(res.user.uid)
             .set({ state: 'user' });
@@ -111,4 +115,4 @@ const Signup = () => {
   }
 };
 
-export default Signup;
+export default connect()(Signup);

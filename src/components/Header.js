@@ -28,12 +28,12 @@ const Header = ({ userId, dispatch }) => {
       .auth()
       .signOut()
       .then(function() {
-        db.collection(`users`)
-          .doc(userId)
-          .delete();
         window.location.href = '/';
         dispatch({ type: 'REQUEST_USER_ID' });
         if (userAnonymous) {
+          db.collection(`users`)
+            .doc(userId)
+            .delete();
           userAnonymous.delete().catch(err => {
             console.log(err);
           });

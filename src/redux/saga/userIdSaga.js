@@ -24,7 +24,6 @@ function* handleLoadUserId(action) {
       },
     });
   } catch (e) {
-    console.log(e);
     yield put({
       type: 'SET_USER_ID_FAILURE',
       payload: {
