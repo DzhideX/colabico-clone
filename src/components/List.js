@@ -13,6 +13,7 @@ const List = ({ userId, todos, dispatch, location, listNameRedux, action }) => {
     working: true,
     pending: true,
   });
+  let noRenderedTodos = 0;
 
   useEffect(() => {
     if (userId) {
@@ -189,9 +190,11 @@ const List = ({ userId, todos, dispatch, location, listNameRedux, action }) => {
                 dispatch={dispatch}
               />
             );
+          } else {
+            ++noRenderedTodos;
           }
         })}
-      {todos.length === 0 && (
+      {noRenderedTodos === todos.length && (
         <p className="newlist__errormessage">
           {' '}
           Add todos or edit preferences to show todos!{' '}
