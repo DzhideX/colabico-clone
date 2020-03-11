@@ -27,7 +27,14 @@ function* handleDeleteTodo(action) {
         status: 'success',
       },
     });
-  } catch (e) {}
+  } catch (e) {
+    yield put({
+      type: 'DELETE_TODO_FAILURE',
+      payload: {
+        status: 'failure',
+      },
+    });
+  }
 }
 
 function* deleteTodoSaga() {

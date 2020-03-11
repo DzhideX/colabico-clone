@@ -25,7 +25,14 @@ function* handleDeleteList(action) {
         status: 'success',
       },
     });
-  } catch (e) {}
+  } catch (e) {
+    yield put({
+      type: 'DELETE_LIST_DATA_FAILURE',
+      payload: {
+        status: 'failure',
+      },
+    });
+  }
 }
 
 function* deleteListSaga() {

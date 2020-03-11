@@ -64,7 +64,15 @@ function* handleAddList(action) {
       });
     }
     yield put(push(response.location));
-  } catch (e) {}
+  } catch (e) {
+    yield put({
+      type: 'ADD_LIST_FAILURE',
+      payload: {
+        type: 'name',
+        status: 'failure',
+      },
+    });
+  }
 }
 
 function* addListSaga() {

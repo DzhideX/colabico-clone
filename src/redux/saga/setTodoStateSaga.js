@@ -24,7 +24,14 @@ function* handleUpdateTodoState(action) {
         status: 'success',
       },
     });
-  } catch (e) {}
+  } catch (e) {
+    yield put({
+      type: 'SET_TODO_STATE_FAILURE',
+      payload: {
+        status: 'failure',
+      },
+    });
+  }
 }
 
 function* setTodoStateSaga() {

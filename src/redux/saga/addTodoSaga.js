@@ -29,7 +29,14 @@ function* handleAddTodo(action) {
         status: 'success',
       },
     });
-  } catch (e) {}
+  } catch (e) {
+    yield put({
+      type: 'ADD_TODO_FAILURE',
+      payload: {
+        status: 'failure',
+      },
+    });
+  }
 }
 
 function* addTodoSaga() {

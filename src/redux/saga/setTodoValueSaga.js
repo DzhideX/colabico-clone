@@ -24,7 +24,14 @@ function* handleSetTodoValue(action) {
         status: 'success',
       },
     });
-  } catch (e) {}
+  } catch (e) {
+    yield put({
+      type: 'SET_TODO_VALUE_FAILURE',
+      payload: {
+        status: 'failure',
+      },
+    });
+  }
 }
 
 function* setTodoValueSaga() {

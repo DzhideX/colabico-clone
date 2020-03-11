@@ -65,7 +65,14 @@ function* handleFetchTodos(action) {
         name,
       },
     });
-  } catch (e) {}
+  } catch (e) {
+    yield put({
+      type: 'GET_TODO_DATA_FAILURE',
+      payload: {
+        status: 'failure',
+      },
+    });
+  }
 }
 
 function* todosSaga() {

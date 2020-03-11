@@ -26,7 +26,14 @@ function* handleChangeListName(action) {
         status: 'success',
       },
     });
-  } catch (e) {}
+  } catch (e) {
+    yield put({
+      type: 'CHANGE_LIST_NAME_FAILURE',
+      payload: {
+        status: 'failure',
+      },
+    });
+  }
 }
 
 function* changeListNameSaga() {

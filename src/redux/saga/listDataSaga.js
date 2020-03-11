@@ -41,7 +41,14 @@ function* handleLoadListData(action) {
         status: 'success',
       },
     });
-  } catch (e) {}
+  } catch (e) {
+    yield put({
+      type: 'SET_LIST_DATA_FAILURE',
+      payload: {
+        status: 'failure',
+      },
+    });
+  }
 }
 
 function* listDataSaga() {
