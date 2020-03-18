@@ -1,11 +1,6 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const { db } = require("./config/firebase");
+import db from "../config/firebase.mjs";
 
-dotenv.config();
-const app = express();
-
-app.get("/user/:userid/listdata", (req, res) => {
+const getListData = (req, res) => {
   let Arr = [];
   db.collection(`users/${req.params.userid}/lists`)
     .get()
@@ -37,23 +32,6 @@ app.get("/user/:userid/listdata", (req, res) => {
           });
       });
     });
-});
+};
 
-app.get("*", (req, res) => {
-  res.send("404");
-});
-
-app.listen(process.env.PORT, () => {
-  console.log(`server is up on port ${process.env.PORT}!`);
-});
-
-// THE ROUTES THAT WE NEED ARE:
-// ADDLISTSAGA - POST REQUEST -- ADDS A NEW LIST
-// ADDTODOSAGA - POST REQUEST -- ADDS A NEW TODO
-// CHANGELISTNAMESAGA - PUT REQUEST -- UPDATE A LIST NAME
-// DELETELISTSAGA - DELETE REQUEST -- DELETE A LIST
-// DELETETODOSAGA - DELETE REQUEST -- DELETE A TODO
-// LISTDATASAGA - GET REQUEST -- GET LIST DATA
-// SETTODOSTATESAGA - PUT REQUEST -- UPDATE TODO STATE
-// SETTODOVALUESAGA - PUT REQUEST -- UPDATE TODO VALUE
-// TODOSSAGA && USERIDSAGA - GET REQUEST X2 -- GET TODOS AND USERID
+export default getListData;

@@ -1,5 +1,5 @@
-const firebase = require("firebase");
-const dotenv = require("dotenv");
+import firebase from "firebase";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -18,4 +18,4 @@ firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
 
-exports.db = db;
+export default db;
