@@ -22,11 +22,7 @@ const getListData = (req, res) => {
           .then(() => {
             if (Arr.length === snapshot.docs.length) {
               // resolve(Arr);
-              let tempString = "List names from that user: ";
-              Arr.map((list, i) => {
-                tempString += `\nName: ${list.name}, last todo: ${list.lastTodo}, id: ${list.id}`;
-              });
-              res.send(Arr);
+              res.json(Arr);
               // res.json(Arr);
             }
           });
