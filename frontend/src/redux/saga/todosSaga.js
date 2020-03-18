@@ -3,53 +3,17 @@ import { db } from '../../firebase/firebase';
 
 function fetchTodos({ userId, listId }) {
   return new Promise((resolve, reject) => {
-    let todos = [];
     if (userId) {
-      db.collection(`users/${userId}/lists/${listId}/todos`)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.docs.forEach(doc => {
-            if (doc.exists) {
-              // console.log({ ...doc.data(), id: doc.id });
-              todos.push({ ...doc.data(), id: doc.id });
-            }
-          });
-          db.collection(`users/${userId}/lists`)
-            .doc(listId)
-            .get()
-            .then(querySnapshotTwo => {
-              resolve({ name: querySnapshotTwo.data().name, todos });
-            });
+      fetch(`http://localhost:4000/user/${userId}/list/${listId}/todos`)
+        .then(res => res.json())
+        .then(response => {
+          resolve(response);
         });
     } else {
-      db.collection('users')
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            db.collection(`users/${doc.id}/lists`)
-              .get()
-              .then(res => {
-                res.forEach(re => {
-                  if (re.id === listId) {
-                    console.log('found it!');
-                    db.collection(`users/${doc.id}/lists/${re.id}/todos`)
-                      .get()
-                      .then(querySnapshot => {
-                        querySnapshot.docs.forEach(doc => {
-                          if (doc.exists) {
-                            // console.log({ ...doc.data(), id: doc.id });
-                            todos.push({ ...doc.data(), id: doc.id });
-                          }
-                        });
-                        resolve({
-                          name: re.data().name,
-                          todos,
-                        });
-                      });
-                  }
-                });
-              });
-          });
+      fetch(`http://localhost:4000/list/${listId}/todos`)
+        .then(res => res.json())
+        .then(response => {
+          resolve(response);
         });
     }
   });
