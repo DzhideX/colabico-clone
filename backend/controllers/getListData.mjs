@@ -21,9 +21,7 @@ const getListData = (req, res) => {
           })
           .then(() => {
             if (Arr.length === snapshot.docs.length) {
-              // resolve(Arr);
               res.json(Arr);
-              // res.json(Arr);
             }
           });
       });

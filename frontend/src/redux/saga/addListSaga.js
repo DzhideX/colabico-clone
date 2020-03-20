@@ -1,43 +1,29 @@
-import { put, takeEvery, call, all, select } from 'redux-saga/effects';
-import { db } from '../../firebase/firebase';
-import { push, goForward, replace } from 'connected-react-router';
+import { put, takeEvery, call } from 'redux-saga/effects';
+import { push } from 'connected-react-router';
 
 function addList({ userId, value, name }) {
   return new Promise((resolve, reject) => {
     if (name) {
-      db.collection(`users/${userId}/lists`)
-        .add({ name: name })
-        .then(docRef => {
-          resolve({
-            type: 'name',
-            name,
-            location: `/l/${docRef.id}`,
-          });
+      fetch(`http://localhost:4000/user/${userId}/listname/${name}`, {
+        method: 'POST',
+      })
+        .then(res => res.json())
+        .then(response => {
+          resolve(response);
         });
     } else if (value) {
-      db.collection(`users/${userId}/lists`)
-        .add({ name: '0' })
-        .then(docRef => {
-          db.collection(`users/${userId}/lists/${docRef.id}/todos`)
-            .add({
-              value: value,
-              state: 'pending',
-            })
-            .then(({ id }) => {
-              resolve({
-                type: 'todo',
-                value,
-                id,
-                location: `/l/${docRef.id}`,
-              });
-            });
+      fetch(`http://localhost:4000/user/${userId}/listvalue/${value}`, {
+        method: 'POST',
+      })
+        .then(res => res.json())
+        .then(response => {
+          resolve(response);
         });
     }
   });
 }
 
 function* handleAddList(action) {
-  //   console.log(action);
   try {
     let response = yield call(addList, action.payload);
     if (response.type === 'todo') {

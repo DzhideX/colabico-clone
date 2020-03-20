@@ -2,18 +2,15 @@ import { put, takeEvery, call, all, select } from 'redux-saga/effects';
 import { db } from '../../firebase/firebase';
 
 function addTodo({ userId, listId, todoValue }) {
-  let addedTodo = {
-    value: todoValue,
-    state: 'pending',
-  };
   return new Promise((resolve, reject) => {
-    db.collection(`users/${userId}/lists/${listId}/todos`)
-      .add(addedTodo)
-      .then(docRef => {
-        resolve({ ...addedTodo, id: docRef.id });
-      })
-      .catch(e => {
-        reject(e);
+    fetch(
+      `http://localhost:4000/user/${userId}/list/${listId}/todo/${todoValue}`,
+      { method: 'POST' },
+    )
+      .then(res => res.json())
+      .then(response => {
+        console.log(response);
+        resolve(response);
       });
   });
 }

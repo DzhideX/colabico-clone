@@ -11,7 +11,6 @@ const getAnonymousTodos = (req, response) => {
           .then(res => {
             res.forEach(re => {
               if (re.id === req.params.listid) {
-                console.log("found it!");
                 db.collection(`users/${doc.id}/lists/${re.id}/todos`)
                   .get()
                   .then(querySnapshot => {
