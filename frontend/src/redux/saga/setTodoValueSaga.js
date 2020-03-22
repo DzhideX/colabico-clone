@@ -3,17 +3,20 @@ import { db } from '../../firebase/firebase';
 
 function setTodoValue({ userId, listId, todoId, value }) {
   return new Promise((resolve, reject) => {
-    db.collection(`users/${userId}/lists/${listId}/todos`)
-      .doc(todoId)
-      .set({ value }, { merge: true })
-      .then(() => {
-        resolve({ todoId, value });
+    fetch(
+      `http://localhost:4000/user/${userId}/list/${listId}/todo/${todoId}/value/${value}`,
+      {
+        method: 'PUT',
+      },
+    )
+      .then(res => res.json())
+      .then(response => {
+        resolve(response);
       });
   });
 }
 
 function* handleSetTodoValue(action) {
-  console.log(action);
   try {
     let { todoId, value } = yield call(setTodoValue, action.payload);
     yield put({

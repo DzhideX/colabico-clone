@@ -3,17 +3,20 @@ import { db } from '../../firebase/firebase';
 
 function setTodoState({ userId, listId, todoId, desiredState }) {
   return new Promise((resolve, reject) => {
-    db.collection(`users/${userId}/lists/${listId}/todos`)
-      .doc(todoId)
-      .set({ state: desiredState }, { merge: true })
-      .then(() => {
-        resolve({ todoId, desiredState });
+    fetch(
+      `http://localhost:4000/user/${userId}/list/${listId}/todo/${todoId}/state/${desiredState}`,
+      {
+        method: 'PUT',
+      },
+    )
+      .then(res => res.json())
+      .then(response => {
+        resolve(response);
       });
   });
 }
 
 function* handleUpdateTodoState(action) {
-  console.log(action);
   try {
     let { todoId, desiredState } = yield call(setTodoState, action.payload);
     yield put({

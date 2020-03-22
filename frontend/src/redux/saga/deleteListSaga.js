@@ -2,15 +2,14 @@ import { put, takeEvery, call, all, select } from 'redux-saga/effects';
 import { db } from '../../firebase/firebase';
 
 function deleteList(list) {
+  console.log(list);
   return new Promise((resolve, reject) => {
-    db.collection(`users/${list.userId}/lists`)
-      .doc(list.key)
-      .delete()
-      .then(() => {
-        resolve(list.data.filter(filterList => filterList.id !== list.key));
-      })
-      .catch(err => {
-        reject(err);
+    fetch(`http://localhost:4000/user/${list.userId}/list/${list.key}`, {
+      method: 'DELETE',
+    })
+      .then(res => res.json())
+      .then(response => {
+        resolve(list.data.filter(filterList => filterList.id !== response));
       });
   });
 }

@@ -25,7 +25,6 @@ const reducer = (
         todos: state.todos.filter(todo => todo.id !== action.payload.key),
       };
     case 'ADD_TODO_SUCCESS':
-      console.log(action.payload.todo);
       return { ...state, todos: [...state.todos, action.payload.todo] };
     case 'CHANGE_LIST_NAME_SUCCESS':
       return { ...state, listName: action.payload.name };

@@ -1,17 +1,13 @@
-import { put, takeEvery, call, all, select } from 'redux-saga/effects';
-import { db } from '../../firebase/firebase';
+import { put, takeEvery, call } from 'redux-saga/effects';
 
 function deleteTodo({ userId, listId, key }) {
-  console.log(key);
   return new Promise((resolve, reject) => {
-    db.collection(`users/${userId}/lists/${listId}/todos`)
-      .doc(key)
-      .delete()
-      .then(() => {
-        resolve(key);
-      })
-      .catch(e => {
-        reject(e);
+    fetch(`http://localhost:4000/user/${userId}/list/${listId}/todo/${key}`, {
+      method: 'DELETE',
+    })
+      .then(res => res.json())
+      .then(response => {
+        resolve(response);
       });
   });
 }
@@ -19,7 +15,6 @@ function deleteTodo({ userId, listId, key }) {
 function* handleDeleteTodo(action) {
   try {
     let response = yield call(deleteTodo, action.payload);
-    console.log(response);
     yield put({
       type: 'DELETE_TODO_SUCCESS',
       payload: {
