@@ -1,5 +1,4 @@
-import { put, takeEvery, call, all, select } from 'redux-saga/effects';
-import { db } from '../../firebase/firebase';
+import { put, takeEvery, call } from 'redux-saga/effects';
 
 function setTodoValue({ userId, listId, todoId, value }) {
   return new Promise((resolve, reject) => {

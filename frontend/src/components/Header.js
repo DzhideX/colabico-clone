@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { firebase, db } from '../firebase/firebase';
+import { firebase } from '../firebase/firebase';
 
 const Header = ({ userId, dispatch }) => {
   const [userState, setUserState] = useState('');
@@ -24,22 +24,11 @@ const Header = ({ userId, dispatch }) => {
   }, [userId]);
 
   const handleLogOut = () => {
-    firebase
-      .auth()
-      .signOut()
-      .then(function() {
-        window.location.href = '/';
-        dispatch({ type: 'REQUEST_USER_ID' });
-        if (userAnonymous) {
-          db.collection(`users`)
-            .doc(userId)
-            .delete();
-          userAnonymous.delete().catch(err => {
-            console.log(err);
-          });
-        }
-      })
-      .catch(function(error) {});
+    dispatch({
+      type: 'REQUEST_LOGOUT',
+      payload: { userAnonymous: userAnonymous ? userAnonymous : false, userId },
+    });
+    window.location.href = '/';
   };
 
   const handleTwitter = () => {

@@ -175,6 +175,7 @@ const List = ({ userId, todos, dispatch, location, listNameRedux, action }) => {
       {/*eslint-disable-next-line array-callback-return*/}
       {todos &&
         todos.length !== 0 &&
+        //eslint-disable-next-line
         todos.map(todo => {
           // LIST COMPLETELY DIFFERENT ITEM
           if (filters[todo.state]) {

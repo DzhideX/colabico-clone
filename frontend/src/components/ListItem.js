@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Square, CheckSquare, Trash2, Copy } from 'react-feather';
-import database, { db } from '../firebase/firebase';
 
 const ListItem = ({
   initialValue,

@@ -87,6 +87,7 @@ const Home = ({ userId, location, listData, dispatch }) => {
         setIsOpen(false);
       }, 3000);
     }
+    //eslint-disable-next-line
   }, [location]);
 
   const setListBoxClass = key => {

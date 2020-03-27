@@ -1,15 +1,17 @@
 import express from "express";
-import getListData from "./controllers/getListData.mjs";
-import getUserTodos from "./controllers/getUserTodos.mjs";
-import getAnonymousTodos from "./controllers/getAnonymousTodos.mjs";
-import addListViaName from "./controllers/addListViaName.mjs";
-import addListViaValue from "./controllers/addListViaValue.mjs";
-import addTodo from "./controllers/addTodo.mjs";
-import changeListName from "./controllers/changeListName.mjs";
-import setTodoState from "./controllers/setTodoState.mjs";
-import setTodoValue from "./controllers/setTodoValue.mjs";
-import deleteList from "./controllers/deleteList.mjs";
-import deleteTodo from "./controllers/deleteTodo.mjs";
+import {
+  getListData,
+  getUserTodos,
+  getAnonymousTodos,
+  addListViaName,
+  addListViaValue,
+  addTodo,
+  changeListName,
+  setTodoState,
+  setTodoValue,
+  deleteList,
+  deleteTodo
+} from "./controllers/index.mjs";
 
 const appRouter = express.Router();
 

@@ -12,6 +12,9 @@ import changeListNameSaga from '../saga/changeListNameSaga';
 import setTodoStateSaga from '../saga/setTodoStateSaga';
 import setTodoValueSaga from '../saga/setTodoValueSaga';
 import addListSaga from '../saga/addListSaga';
+import loginSaga from '../saga/loginSaga';
+import signUpSaga from '../saga/signUpSaga';
+import logOutSaga from '../saga/logOutSaga';
 import reducer from '../reducer/reducer';
 
 //--------------------------------------------
@@ -66,6 +69,9 @@ export default function configureStore(preloadedState) {
   sagaMiddleware.run(setTodoStateSaga);
   sagaMiddleware.run(setTodoValueSaga);
   sagaMiddleware.run(addListSaga);
+  sagaMiddleware.run(loginSaga);
+  sagaMiddleware.run(signUpSaga);
+  sagaMiddleware.run(logOutSaga);
 
   return store;
 }

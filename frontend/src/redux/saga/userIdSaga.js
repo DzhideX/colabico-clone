@@ -1,4 +1,4 @@
-import { put, takeEvery, call, all, select } from 'redux-saga/effects';
+import { put, takeEvery, call } from 'redux-saga/effects';
 import { firebase } from '../../firebase/firebase';
 
 function fetchUser() {

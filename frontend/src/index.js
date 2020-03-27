@@ -7,7 +7,7 @@ import * as serviceWorker from './serviceWorker';
 import AppRouter from './routers/AppRouter';
 // eslint-disable-next-line
 import firebase, { db } from './firebase/firebase';
-import { connectedRouter, ConnectedRouter } from 'connected-react-router';
+import { ConnectedRouter } from 'connected-react-router';
 import configureStore, { history } from './redux/store/index';
 
 const store = configureStore();

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import { firebase } from '../firebase/firebase';
+import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { connect } from 'react-redux';
@@ -17,7 +16,6 @@ const Login = ({ dispatch }) => {
       .required('Password is required.'),
   });
 
-  const [redirect, updateRedirect] = useState();
   const { register, errors, handleSubmit } = useForm({ validationSchema });
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -31,80 +29,58 @@ const Login = ({ dispatch }) => {
     );
   }, [errors]);
 
-  const onSubmit = ({ email, password }) => {
-    if (email && password) {
-      firebase
-        .auth()
-        .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-        .then(function() {
-          return firebase
-            .auth()
-            .signInWithEmailAndPassword(email, password)
-            .then(() => {
-              updateRedirect('/');
-              dispatch({ type: 'REQUEST_USER_ID' });
-            })
-            .catch(function(error) {
-              setErrorMessage(error.message);
-            });
-        })
-        .catch(function(error) {
-          setErrorMessage(error.message);
-        });
-    }
-  };
+  const onSubmit = ({ email, password }) =>
+    email &&
+    password &&
+    dispatch({ type: 'REQUEST_LOGIN', payload: { email, password } });
 
-  if (redirect) {
-    return <Redirect to={redirect} />;
-  } else {
-    return (
-      <div className="main-flex-container">
-        <Link className="form__home-button" to="/">
-          {' '}
-          COLABI.CO{' '}
-        </Link>
-        <div className={errorMessage ? 'login__form--error' : 'login__form'}>
-          {errorMessage && (
-            <div className="login__form__erromessage">
-              {' '}
-              <p>{errorMessage}</p>{' '}
-            </div>
-          )}
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <input
-              name="email"
-              ref={register}
-              className="login__input"
-              placeholder="Email"
-            ></input>
-            <input
-              name="password"
-              ref={register}
-              className="login__input"
-              placeholder="Password"
-              type="password"
-            ></input>
-            <div className="login__form__buttons">
-              <button type="input" className="login__form__button">
-                LOGIN
-              </button>
-              <Link
-                to="/reset"
-                className="login__form__button login__form__resetbutton"
-              >
-                FORGOT?
-              </Link>
-            </div>
-          </form>
-        </div>
-        <Link to="/signup" className="login-form-signup">
-          <p className="">
-            Don't have an account? <span>Sign up</span>!
-          </p>
-        </Link>
+  return (
+    <div className="main-flex-container">
+      <Link className="form__home-button" to="/">
+        {' '}
+        COLABI.CO{' '}
+      </Link>
+      <div className={errorMessage ? 'login__form--error' : 'login__form'}>
+        {errorMessage && (
+          <div className="login__form__erromessage">
+            {' '}
+            <p>{errorMessage}</p>{' '}
+          </div>
+        )}
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <input
+            name="email"
+            ref={register}
+            className="login__input"
+            placeholder="Email"
+          ></input>
+          <input
+            name="password"
+            ref={register}
+            className="login__input"
+            placeholder="Password"
+            type="password"
+          ></input>
+          <div className="login__form__buttons">
+            <button type="input" className="login__form__button">
+              LOGIN
+            </button>
+            <Link
+              to="/reset"
+              className="login__form__button login__form__resetbutton"
+            >
+              FORGOT?
+            </Link>
+          </div>
+        </form>
       </div>
-    );
-  }
+      <Link to="/signup" className="login-form-signup">
+        <p className="">
+          Don't have an account? <span>Sign up</span>!
+        </p>
+      </Link>
+    </div>
+  );
 };
 
 export default connect()(Login);

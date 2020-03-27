@@ -56,6 +56,7 @@ const reducer = (
       } else if (action.payload.type === 'name') {
         return { ...state, listName: action.payload.listName };
       }
+    //eslint-disable-next-line
     default:
       return state;
   }
