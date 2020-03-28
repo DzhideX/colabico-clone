@@ -1,0 +1,7 @@
+{
+  "name": "colabico-clone",
+  "scripts": {
+    "start-server": "cd backend && node app.mjs",
+    "start-client": "cd frontend && npm start"
+  }
+}
