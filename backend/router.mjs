@@ -10,10 +10,21 @@ import {
   setTodoState,
   setTodoValue,
   deleteList,
-  deleteTodo
+  deleteTodo,
 } from "./controllers/index.mjs";
+import { Users } from "./config/models.mjs";
+import model from "./config/oauthModel.mjs";
+import Oauth2Server from "oauth2-server";
 
 const appRouter = express.Router();
+const oauth = new Oauth2Server({
+  model: model,
+  accessTokenLifetime: 60 * 5,
+  allowBearerTokensInQueryString: true,
+});
+
+const Request = Oauth2Server.Request;
+const Response = Oauth2Server.Response;
 
 appRouter.get("/user/:userid/listdata", getListData);
 
@@ -42,6 +53,64 @@ appRouter.put(
 appRouter.delete("/user/:userid/list/:listid", deleteList);
 
 appRouter.delete("/user/:userid/list/:listid/todo/:todoid", deleteTodo);
+
+appRouter.post("/signup", (req, res) => {
+  console.log(req.body);
+  Users.findOne({
+    attributes: ["email", "password", "id"],
+    where: {
+      email: req.body.email,
+    },
+  }).then((data) => {
+    if (data) {
+      console.log("such user exists");
+      res.sendStatus(409);
+    } else {
+      Users.create({ email: req.body.email, password: req.body.password });
+      res.sendStatus(200);
+    }
+  });
+});
+
+appRouter.post("/login", (req, res) => {
+  const loginData = JSON.parse(Object.keys(req.body)[0]);
+  req.body.username = loginData.username;
+  req.body.password = loginData.password;
+  req.body.grant_type = loginData.grant_type;
+  console.log(req.body);
+  Users.findOne({
+    attributes: ["email", "password", "id"],
+    where: {
+      email: req.body.username,
+      password: req.body.password,
+    },
+  }).then((data) => {
+    if (data) {
+      let response = new Response(res);
+      let request = new Request(req);
+      oauth
+        .token(request, response)
+        .then((token) => {
+          res.json(token.accessToken);
+        })
+        .catch((err) => res.status(err.code || 500).json(err));
+    }
+  });
+});
+
+appRouter.get("/authorize", (req, res) => {
+  let response = new Response(res);
+  let request = new Request(req);
+
+  oauth
+    .authenticate(request, response)
+    .then((token) => {
+      res.json({ userId: token.userId, statusCode: 200 });
+    })
+    .catch((err) => {
+      res.status(err.code || 500).json(err);
+    });
+});
 
 appRouter.get("*", (req, res) => {
   res.send("404");

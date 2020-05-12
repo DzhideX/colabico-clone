@@ -1,19 +1,38 @@
 import { put, takeEvery, call } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
-import { firebase } from '../../firebase/firebase';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 function login({ email, password }) {
   return new Promise((resolve, reject) => {
-    firebase
-      .auth()
-      .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-      .then(function() {
-        return firebase
-          .auth()
-          .signInWithEmailAndPassword(email, password)
-          .then(() => {
-            resolve('resolved');
-          });
+    fetch('http://localhost:4000/login', {
+      method: 'POST',
+      body: JSON.stringify({
+        username: email,
+        password,
+        grant_type: 'password',
+      }),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization:
+          'Basic YXBwbGljYXRpb246a1huMnI1dTh4L0E/RChHK0tiUGVTaFZtWXEzdDZ2OXk=',
+      },
+    })
+      .then(response => {
+        if (response.status >= 400) {
+          console.log('Failure!');
+          reject('rejected');
+        } else {
+          return response.json();
+        }
+      })
+      .then(token => {
+        cookies.set('token', token, {
+          maxAge: 60 * 5,
+          path: '/',
+        });
+        resolve('resolved');
       });
   });
 }

@@ -1,18 +1,22 @@
 import { put, takeEvery, call } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
-import { firebase, db } from '../../firebase/firebase';
 
 function signup({ email, password }) {
   return new Promise((resolve, reject) => {
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(res => {
-        db.collection(`users`)
-          .doc(res.user.uid)
-          .set({ state: 'user' });
+    fetch(`http://localhost:4000/signup`, {
+      method: 'POST',
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    }).then(response => {
+      if (response.status >= 400) {
+        reject('rejected');
+      } else {
         resolve('resolved');
-      });
+      }
+    });
   });
 }
 
@@ -26,8 +30,7 @@ function* handleSignUp(action) {
           status: 'success',
         },
       });
-      yield put({ type: 'REQUEST_USER_ID' });
-      yield put(push('/'));
+      yield put(push('/login'));
     }
   } catch (e) {
     yield put({

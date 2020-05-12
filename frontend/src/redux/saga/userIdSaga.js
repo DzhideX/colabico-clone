@@ -1,15 +1,24 @@
 import { put, takeEvery, call } from 'redux-saga/effects';
-import { firebase } from '../../firebase/firebase';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 function fetchUser() {
   return new Promise((resolve, reject) => {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        resolve(user.uid);
-      } else {
-        reject('error');
-      }
-    });
+    const tokenValue = cookies.get('token');
+    fetch('http://localhost:4000/authorize', {
+      headers: {
+        Authorization: `Bearer ${tokenValue}`,
+      },
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.statusCode >= 400) {
+          reject('rejected');
+        } else {
+          resolve(data.userId);
+        }
+      });
   });
 }
 
