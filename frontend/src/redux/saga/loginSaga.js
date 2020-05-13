@@ -29,7 +29,7 @@ function login({ email, password }) {
       })
       .then(token => {
         cookies.set('token', token, {
-          maxAge: 60 * 5,
+          maxAge: 60 * 60 * 24 * 30 * 12, //one year, temporary solution
           path: '/',
         });
         resolve('resolved');

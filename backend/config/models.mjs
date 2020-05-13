@@ -9,6 +9,7 @@ const sequelize = new Sequelize("colabico", "postgres", process.env.PASSWORD, {
 const Model = Sequelize.Model;
 
 class Users extends Model {}
+class Tokens extends Model {}
 
 Users.init(
   {
@@ -33,4 +34,46 @@ Users.init(
   }
 );
 
-export { Users };
+Tokens.init(
+  {
+    created_at: {
+      type: Sequelize.DATE,
+    },
+    updated_at: {
+      type: Sequelize.DATE,
+    },
+    deleted_at: {
+      type: Sequelize.DATE,
+    },
+    id: {
+      type: Sequelize.UUIDV4,
+    },
+    access_token: {
+      type: Sequelize.CHAR,
+    },
+    access_token_expires_at: {
+      type: Sequelize.DATE,
+    },
+    refresh_token: {
+      type: Sequelize.CHAR,
+    },
+    refresh_token_expires_at: {
+      type: Sequelize.DATE,
+    },
+    oauth_client_id: {
+      type: Sequelize.CHAR,
+    },
+    user_id: {
+      type: Sequelize.UUID,
+      primaryKey: true,
+    },
+  },
+  {
+    sequelize,
+    modelName: "tokens",
+    tableName: "tokens",
+    timestamps: false,
+  }
+);
+
+export { Users, Tokens };

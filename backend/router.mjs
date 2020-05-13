@@ -1,58 +1,59 @@
 import express from "express";
-import {
-  getListData,
-  getUserTodos,
-  getAnonymousTodos,
-  addListViaName,
-  addListViaValue,
-  addTodo,
-  changeListName,
-  setTodoState,
-  setTodoValue,
-  deleteList,
-  deleteTodo,
-} from "./controllers/index.mjs";
-import { Users } from "./config/models.mjs";
+// import {
+//   getListData,
+//   getUserTodos,
+//   getAnonymousTodos,
+//   addListViaName,
+//   addListViaValue,
+//   addTodo,
+//   changeListName,
+//   setTodoState,
+//   setTodoValue,
+//   deleteList,
+//   deleteTodo,
+// } from "./controllers/index.mjs";
+import "./controllers/index.mjs";
+import { Users, Tokens } from "./config/models.mjs";
 import model from "./config/oauthModel.mjs";
 import Oauth2Server from "oauth2-server";
 
 const appRouter = express.Router();
 const oauth = new Oauth2Server({
   model: model,
-  accessTokenLifetime: 60 * 5,
+  accessTokenLifetime: 60 * 60 * 24 * 30 * 12, //hopefully temporary solution
   allowBearerTokensInQueryString: true,
 });
 
 const Request = Oauth2Server.Request;
 const Response = Oauth2Server.Response;
 
-appRouter.get("/user/:userid/listdata", getListData);
+// appRouter.get("/user/:userid/listdata", getListData);
 
-appRouter.get("/user/:userid/list/:listid/todos", getUserTodos);
+// appRouter.get("/user/:userid/list/:listid/todos", getUserTodos);
 
-appRouter.get("/list/:listid/todos", getAnonymousTodos);
+// appRouter.get("/list/:listid/todos", getAnonymousTodos);
 
-appRouter.post("/user/:userid/listname/:name", addListViaName);
+// appRouter.post("/user/:userid/listname/:name", addListViaName);
 
-appRouter.post("/user/:userid/listvalue/:value", addListViaValue);
+// appRouter.post("/user/:userid/listvalue/:value", addListViaValue);
 
-appRouter.post("/user/:userid/list/:listid/todo/:todovalue", addTodo);
+// appRouter.post("/user/:userid/list/:listid/todo/:todovalue", addTodo);
 
-appRouter.put("/user/:userid/list/:listid/name/:name", changeListName);
+// appRouter.put("/user/:userid/list/:listid/name/:name", changeListName);
 
-appRouter.put(
-  "/user/:userid/list/:listid/todo/:todoid/state/:state",
-  setTodoState
-);
+// appRouter.put(
+//   "/user/:userid/list/:listid/todo/:todoid/state/:state",
+//   setTodoState
+// );
 
-appRouter.put(
-  "/user/:userid/list/:listid/todo/:todoid/value/:value",
-  setTodoValue
-);
+// appRouter.put(
+//   "/user/:userid/list/:listid/todo/:todoid/value/:value",
+//   setTodoValue
+// );
 
-appRouter.delete("/user/:userid/list/:listid", deleteList);
+// appRouter.delete("/user/:userid/list/:listid", deleteList);
 
-appRouter.delete("/user/:userid/list/:listid/todo/:todoid", deleteTodo);
+// appRouter.delete("/user/:userid/list/:listid/todo/:todoid", deleteTodo);
 
 appRouter.post("/signup", (req, res) => {
   console.log(req.body);
@@ -77,7 +78,6 @@ appRouter.post("/login", (req, res) => {
   req.body.username = loginData.username;
   req.body.password = loginData.password;
   req.body.grant_type = loginData.grant_type;
-  console.log(req.body);
   Users.findOne({
     attributes: ["email", "password", "id"],
     where: {
@@ -109,6 +109,20 @@ appRouter.get("/authorize", (req, res) => {
     })
     .catch((err) => {
       res.status(err.code || 500).json(err);
+    });
+});
+
+appRouter.post("/deleteToken", (req, res) => {
+  Tokens.destroy({
+    where: {
+      access_token: req.body.token,
+    },
+  })
+    .then((rowDeleted) => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.sendStatus(400);
     });
 });
 

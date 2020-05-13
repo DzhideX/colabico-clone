@@ -6,19 +6,21 @@ const cookies = new Cookies();
 function fetchUser() {
   return new Promise((resolve, reject) => {
     const tokenValue = cookies.get('token');
-    fetch('http://localhost:4000/authorize', {
-      headers: {
-        Authorization: `Bearer ${tokenValue}`,
-      },
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.statusCode >= 400) {
-          reject('rejected');
-        } else {
-          resolve(data.userId);
-        }
-      });
+    if (tokenValue) {
+      fetch('http://localhost:4000/authorize', {
+        headers: {
+          Authorization: `Bearer ${tokenValue}`,
+        },
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.statusCode >= 400) {
+            reject('rejected');
+          } else {
+            resolve(data.userId);
+          }
+        });
+    }
   });
 }
 
