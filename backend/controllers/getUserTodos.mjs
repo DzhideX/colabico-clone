@@ -1,22 +1,27 @@
-import db from "../config/firebase.mjs";
+import { Todos, Lists } from "../config/models.mjs";
 
 const getUserTodos = (req, res) => {
   let todos = [];
-  db.collection(`users/${req.params.userid}/lists/${req.params.listid}/todos`)
-    .get()
-    .then(querySnapshot => {
-      querySnapshot.docs.forEach(doc => {
-        if (doc.exists) {
-          todos.push({ ...doc.data(), id: doc.id });
-        }
+  Todos.findAll({
+    where: {
+      list_id: req.params.listid,
+    },
+  }).then((todosResponse) => {
+    todosResponse.forEach((todo) => {
+      todos.push({
+        state: todo.dataValues.state,
+        value: todo.dataValues.value,
+        id: todo.dataValues.id,
       });
-      db.collection(`users/${req.params.userid}/lists`)
-        .doc(req.params.listid)
-        .get()
-        .then(querySnapshotTwo => {
-          res.json({ name: querySnapshotTwo.data().name, todos });
-        });
     });
+    Lists.findOne({
+      where: {
+        id: req.params.listid,
+      },
+    }).then((listsResponse) => {
+      res.json({ name: listsResponse.dataValues.name, todos });
+    });
+  });
 };
 
 export default getUserTodos;

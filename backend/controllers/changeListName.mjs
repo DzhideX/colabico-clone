@@ -1,12 +1,18 @@
-import db from "../config/firebase.mjs";
+import { Lists } from "../config/models.mjs";
 
 const changeListName = (req, res) => {
-  db.collection(`users/${req.params.userid}/lists`)
-    .doc(req.params.listid)
-    .set({ name: req.params.name })
-    .then(() => {
-      res.json(req.params.name);
-    });
+  Lists.update(
+    {
+      name: req.params.name,
+    },
+    {
+      where: {
+        id: req.params.listid,
+      },
+    }
+  ).then(() => {
+    res.json(req.params.name);
+  });
 };
 
 export default changeListName;

@@ -195,15 +195,16 @@ const List = ({ userId, todos, dispatch, location, listNameRedux, action }) => {
             ++noRenderedTodos;
           }
         })}
-      {noRenderedTodos === todos.length && (
-        <p className="newlist__errormessage">
-          {' '}
-          Add todos or edit preferences to show todos!{' '}
-        </p>
-      )}
     </div>
   );
 };
+
+// {noRenderedTodos === todos.length && (
+//   <p className="newlist__errormessage">
+//     {' '}
+//     Add todos or edit preferences to show todos!{' '}
+//   </p>
+// )}
 
 //(todoObject[key].state === filters.working || todoObject[key].state === filters.done || todoObject[key].state === filters.pending)
 const mapStateToProps = state => ({

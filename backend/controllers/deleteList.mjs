@@ -1,12 +1,13 @@
-import db from "../config/firebase.mjs";
+import { Lists } from "../config/models.mjs";
 
 const deleteList = (req, res) => {
-  db.collection(`users/${req.params.userid}/lists`)
-    .doc(req.params.listid)
-    .delete()
-    .then(() => {
-      res.json(req.params.listid);
-    });
+  Lists.destroy({
+    where: {
+      id: req.params.listid,
+    },
+  }).then(() => {
+    res.json(req.params.listid);
+  });
 };
 
 export default deleteList;
