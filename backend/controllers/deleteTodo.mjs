@@ -1,12 +1,13 @@
-import db from "../config/firebase.mjs";
+import { Todos } from "../config/models.mjs";
 
 const deleteTodo = (req, res) => {
-  db.collection(`users/${req.params.userid}/lists/${req.params.listid}/todos`)
-    .doc(req.params.todoid)
-    .delete()
-    .then(() => {
-      res.json(req.params.todoid);
-    });
+  Todos.destroy({
+    where: {
+      id: req.params.todoid,
+    },
+  }).then(() => {
+    res.json(req.params.todoid);
+  });
 };
 
 export default deleteTodo;

@@ -8,7 +8,6 @@ function addTodo({ userId, listId, todoValue }) {
     )
       .then(res => res.json())
       .then(response => {
-        console.log(response);
         resolve(response);
       });
   });

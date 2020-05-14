@@ -36,23 +36,23 @@ appRouter.post("/user/:userid/listname/:name", addListViaName);
 
 // appRouter.post("/user/:userid/listvalue/:value", addListViaValue);
 
-// appRouter.post("/user/:userid/list/:listid/todo/:todovalue", addTodo);
+appRouter.post("/user/:userid/list/:listid/todo/:todovalue", addTodo);
 
 appRouter.put("/user/:userid/list/:listid/name/:name", changeListName);
 
-// appRouter.put(
-//   "/user/:userid/list/:listid/todo/:todoid/state/:state",
-//   setTodoState
-// );
+appRouter.put(
+  "/user/:userid/list/:listid/todo/:todoid/state/:state",
+  setTodoState
+);
 
-// appRouter.put(
-//   "/user/:userid/list/:listid/todo/:todoid/value/:value",
-//   setTodoValue
-// );
+appRouter.put(
+  "/user/:userid/list/:listid/todo/:todoid/value/:value",
+  setTodoValue
+);
 
 appRouter.delete("/user/:userid/list/:listid", deleteList);
 
-// appRouter.delete("/user/:userid/list/:listid/todo/:todoid", deleteTodo);
+appRouter.delete("/user/:userid/list/:listid/todo/:todoid", deleteTodo);
 
 appRouter.post("/signup", (req, res) => {
   console.log(req.body);

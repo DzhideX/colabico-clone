@@ -1,12 +1,18 @@
-import db from "../config/firebase.mjs";
+import { Todos } from "../config/models.mjs";
 
 const setTodoState = (req, res) => {
-  db.collection(`users/${req.params.userid}/lists/${req.params.listid}/todos`)
-    .doc(req.params.todoid)
-    .set({ state: req.params.state }, { merge: true })
-    .then(() => {
-      res.json({ todoId: req.params.todoid, desiredState: req.params.state });
-    });
+  Todos.update(
+    {
+      state: req.params.state,
+    },
+    {
+      where: {
+        id: req.params.todoid,
+      },
+    }
+  ).then(() => {
+    res.json({ todoId: req.params.todoid, desiredState: req.params.state });
+  });
 };
 
 export default setTodoState;

@@ -22,7 +22,7 @@ const getListData = (req, res) => {
           // Push all todos in an array
           todos.push(todo.dataValues);
         });
-        const sortedTodos = todos.sort((a, b) => b.createdAt - a.createdAt); //Sort todos by date
+        const sortedTodos = todos.sort((a, b) => a.created_at - b.created_at); //Sort todos by date
         let tempObj = {
           name: list.dataValues.name,
           id: list.dataValues.id,
