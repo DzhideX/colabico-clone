@@ -14,6 +14,7 @@ const Model = Sequelize.Model;
 class Users extends Model {}
 class Tokens extends Model {}
 class Lists extends Model {}
+class Todos extends Model {}
 
 Users.init(
   {
@@ -93,6 +94,9 @@ Lists.init(
     user_id: {
       type: Sequelize.UUIDV4,
     },
+    created_at: {
+      type: Sequelize.DATE,
+    },
   },
   {
     sequelize,
@@ -102,4 +106,32 @@ Lists.init(
   }
 );
 
-export { Users, Tokens, Lists };
+Todos.init(
+  {
+    created_at: {
+      type: Sequelize.DATE,
+    },
+    id: {
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
+      primaryKey: true,
+    },
+    list_id: {
+      type: Sequelize.UUIDV4,
+    },
+    state: {
+      type: Sequelize.TEXT,
+    },
+    value: {
+      type: Sequelize.TEXT,
+    },
+  },
+  {
+    sequelize,
+    modelName: "todos",
+    tableName: "todos",
+    timestamps: false,
+  }
+);
+
+export { Users, Tokens, Lists, Todos };

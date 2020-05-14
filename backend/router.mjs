@@ -26,7 +26,7 @@ const oauth = new Oauth2Server({
 const Request = Oauth2Server.Request;
 const Response = Oauth2Server.Response;
 
-// appRouter.get("/user/:userid/listdata", getListData);
+appRouter.get("/user/:userid/listdata", getListData);
 
 // appRouter.get("/user/:userid/list/:listid/todos", getUserTodos);
 
