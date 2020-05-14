@@ -1,19 +1,18 @@
 import express from "express";
-// import {
-//   getListData,
-//   getUserTodos,
-//   getAnonymousTodos,
-//   addListViaName,
-//   addListViaValue,
-//   addTodo,
-//   changeListName,
-//   setTodoState,
-//   setTodoValue,
-//   deleteList,
-//   deleteTodo,
-// } from "./controllers/index.mjs";
-import "./controllers/index.mjs";
-import { Users, Tokens } from "./config/models.mjs";
+import {
+  getListData,
+  getUserTodos,
+  getAnonymousTodos,
+  addListViaName,
+  addListViaValue,
+  addTodo,
+  changeListName,
+  setTodoState,
+  setTodoValue,
+  deleteList,
+  deleteTodo,
+} from "./controllers/index.mjs";
+import { Users, Tokens, Lists } from "./config/models.mjs";
 import model from "./config/oauthModel.mjs";
 import Oauth2Server from "oauth2-server";
 
@@ -33,7 +32,7 @@ const Response = Oauth2Server.Response;
 
 // appRouter.get("/list/:listid/todos", getAnonymousTodos);
 
-// appRouter.post("/user/:userid/listname/:name", addListViaName);
+appRouter.post("/user/:userid/listname/:name", addListViaName);
 
 // appRouter.post("/user/:userid/listvalue/:value", addListViaValue);
 

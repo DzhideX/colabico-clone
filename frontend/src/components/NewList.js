@@ -46,21 +46,21 @@ const NewList = ({ userId, todos, dispatch }) => {
           payload: { userId, value: e.target.value },
         });
       } else {
-        console.log('sign in!');
-        firebase
-          .auth()
-          .signInAnonymously()
-          .then(res => {
-            dispatch(push('/', '/'));
-            dispatch({ type: 'REQUEST_USER_ID' });
-            db.collection(`users`)
-              .doc(res.user.uid)
-              .set({ state: 'user' });
-          })
-          .catch(function(error) {
-            var errorCode = error.code;
-            console.log(errorCode);
-          });
+        // console.log('sign in!');
+        // firebase
+        //   .auth()
+        //   .signInAnonymously()
+        //   .then(res => {
+        //     dispatch(push('/', '/'));
+        //     dispatch({ type: 'REQUEST_USER_ID' });
+        //     db.collection(`users`)
+        //       .doc(res.user.uid)
+        //       .set({ state: 'user' });
+        // })
+        // .catch(function(error) {
+        //   var errorCode = error.code;
+        //   console.log(errorCode);
+        // });
       }
     }
   };
@@ -95,23 +95,23 @@ const NewList = ({ userId, todos, dispatch }) => {
             if (userId) {
               dispatch({
                 type: 'REQUEST_ADD_LIST',
-                payload: { userId, name: listName === '' ? '0' : listName },
+                payload: { userId, name: listName },
               });
             } else {
-              firebase
-                .auth()
-                .signInAnonymously()
-                .then(res => {
-                  dispatch(push('/', '/'));
-                  dispatch({ type: 'REQUEST_USER_ID' });
-                  db.collection(`users`)
-                    .doc(res.user.uid)
-                    .set({ state: 'user' });
-                })
-                .catch(function(error) {
-                  var errorCode = error.code;
-                  console.log(errorCode);
-                });
+              // firebase
+              //   .auth()
+              //   .signInAnonymously()
+              //   .then(res => {
+              //     dispatch(push('/', '/'));
+              //     dispatch({ type: 'REQUEST_USER_ID' });
+              //     db.collection(`users`)
+              //       .doc(res.user.uid)
+              //       .set({ state: 'user' });
+              //   })
+              //   .catch(function(error) {
+              //     var errorCode = error.code;
+              //     console.log(errorCode);
+              //   });
             }
           }}
           onFocus={onInputFocus}

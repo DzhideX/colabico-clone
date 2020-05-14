@@ -1,4 +1,7 @@
 import Sequelize from "sequelize";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const sequelize = new Sequelize("colabico", "postgres", process.env.PASSWORD, {
   host: "localhost",
@@ -10,6 +13,7 @@ const Model = Sequelize.Model;
 
 class Users extends Model {}
 class Tokens extends Model {}
+class Lists extends Model {}
 
 Users.init(
   {
@@ -76,4 +80,26 @@ Tokens.init(
   }
 );
 
-export { Users, Tokens };
+Lists.init(
+  {
+    name: {
+      type: Sequelize.TEXT,
+    },
+    id: {
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
+      primaryKey: true,
+    },
+    user_id: {
+      type: Sequelize.UUIDV4,
+    },
+  },
+  {
+    sequelize,
+    modelName: "lists",
+    tableName: "lists",
+    timestamps: false,
+  }
+);
+
+export { Users, Tokens, Lists };

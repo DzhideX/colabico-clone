@@ -1,15 +1,17 @@
-import db from "../config/firebase.mjs";
+import { Lists } from "../config/models.mjs";
 
 const addListViaName = (req, res) => {
-  db.collection(`users/${req.params.userid}/lists`)
-    .add({ name: req.params.name })
-    .then(docRef => {
-      res.json({
-        type: "name",
-        name: req.params.name,
-        location: `/l/${docRef.id}`
-      });
+  Lists.create({
+    name: req.params.name,
+    user_id: req.params.userid,
+  }).then((response) => {
+    console.log(response.dataValues.id);
+    res.json({
+      type: "name",
+      name: req.params.name,
+      location: `/l/${response.dataValues.id}`,
     });
+  });
 };
 
 export default addListViaName;
