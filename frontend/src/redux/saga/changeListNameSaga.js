@@ -2,9 +2,12 @@ import { put, takeEvery, call } from 'redux-saga/effects';
 
 function changeListName({ userId, listId, value }) {
   return new Promise((resolve, reject) => {
-    fetch(`http://localhost:4000/user/${userId}/list/${listId}/name/${value}`, {
-      method: 'PUT',
-    })
+    fetch(
+      `http://localhost:4000/user/${userId}/list/${listId}/?name=${value}`,
+      {
+        method: 'PUT',
+      },
+    )
       .then(res => res.json())
       .then(response => {
         resolve(response);

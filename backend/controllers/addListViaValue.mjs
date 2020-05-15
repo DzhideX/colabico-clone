@@ -1,23 +1,23 @@
-import db from "../config/firebase.mjs";
+import { Lists, Todos } from "../config/models.mjs";
 
 const addListViaValue = (req, res) => {
-  db.collection(`users/${req.params.userid}/lists`)
-    .add({ name: "0" })
-    .then(docRef => {
-      db.collection(`users/${req.params.userid}/lists/${docRef.id}/todos`)
-        .add({
-          value: req.params.value,
-          state: "pending"
-        })
-        .then(({ id }) => {
-          res.json({
-            type: "todo",
-            value: req.params.value,
-            id,
-            location: `/l/${docRef.id}`
-          });
-        });
+  Lists.create({
+    name: "",
+    user_id: req.params.userid,
+  }).then((listsResponse) => {
+    Todos.create({
+      list_id: listsResponse.dataValues.id,
+      value: req.params.value,
+      state: "pending",
+    }).then((todosResponse) => {
+      res.json({
+        type: "todo",
+        value: req.params.value,
+        id: todosResponse.dataValues.id,
+        location: `/l/${listsResponse.dataValues.id}`,
+      });
     });
+  });
 };
 
 export default addListViaValue;

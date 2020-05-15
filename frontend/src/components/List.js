@@ -22,7 +22,6 @@ const List = ({ userId, todos, dispatch, location, listNameRedux, action }) => {
         payload: { userId, listId: location.pathname.split('/')[2] },
       });
     } else if (userId === '') {
-      console.log('happened!', location.pathname.split('/')[2]);
       dispatch({
         type: 'REQUEST_TODO_DATA',
         payload: { listId: location.pathname.split('/')[2] },

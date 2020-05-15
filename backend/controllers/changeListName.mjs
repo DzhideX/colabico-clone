@@ -3,7 +3,7 @@ import { Lists } from "../config/models.mjs";
 const changeListName = (req, res) => {
   Lists.update(
     {
-      name: req.params.name,
+      name: req.query.name,
     },
     {
       where: {
@@ -11,7 +11,7 @@ const changeListName = (req, res) => {
       },
     }
   ).then(() => {
-    res.json(req.params.name);
+    res.json(req.query.name);
   });
 };
 

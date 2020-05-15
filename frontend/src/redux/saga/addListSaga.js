@@ -2,10 +2,9 @@ import { put, takeEvery, call } from 'redux-saga/effects';
 import { push } from 'connected-react-router';
 
 function addList({ userId, value, name }) {
-  console.log(userId, name);
   return new Promise((resolve, reject) => {
-    if (name) {
-      fetch(`http://localhost:4000/user/${userId}/listname/${name}`, {
+    if (name === '' || name) {
+      fetch(`http://localhost:4000/user/${userId}/?listname=${name}`, {
         method: 'POST',
       })
         .then(res => res.json())

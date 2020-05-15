@@ -1,34 +1,32 @@
-import db from "../config/firebase.mjs";
+import { Todos, Lists } from "../config/models.mjs";
 
-const getAnonymousTodos = (req, response) => {
+const getAnonymousTodos = (req, res) => {
   let todos = [];
-  db.collection("users")
-    .get()
-    .then(querySnapshot => {
-      querySnapshot.forEach(doc => {
-        db.collection(`users/${doc.id}/lists`)
-          .get()
-          .then(res => {
-            res.forEach(re => {
-              if (re.id === req.params.listid) {
-                db.collection(`users/${doc.id}/lists/${re.id}/todos`)
-                  .get()
-                  .then(querySnapshot => {
-                    querySnapshot.docs.forEach(doc => {
-                      if (doc.exists) {
-                        todos.push({ ...doc.data(), id: doc.id });
-                      }
-                    });
-                    response.json({
-                      name: re.data().name,
-                      todos
-                    });
-                  });
-              }
-            });
-          });
-      });
+  Todos.findAll({
+    where: {
+      list_id: req.params.listid,
+    },
+  }).then((todosResponse) => {
+    todosResponse.forEach((todo) => {
+      todos.push(todo.dataValues);
     });
+    Lists.findOne({
+      where: {
+        id: req.params.listid,
+      },
+    }).then((listsResponse) => {
+      const sortedTodos = todos.sort((a, b) => a.created_at - b.created_at);
+      let resultTodos = [];
+      sortedTodos.forEach((sortedTodo) => {
+        resultTodos.push({
+          state: sortedTodo.state,
+          value: sortedTodo.value,
+          id: sortedTodo.id,
+        });
+      });
+      res.json({ name: listsResponse.dataValues.name, todos: resultTodos });
+    });
+  });
 };
 
 export default getAnonymousTodos;
