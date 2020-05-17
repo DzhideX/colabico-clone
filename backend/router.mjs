@@ -16,6 +16,7 @@ import { Users, Tokens } from "./config/models.mjs";
 import model from "./config/oauthModel.mjs";
 import Oauth2Server from "oauth2-server";
 import { v4 as uuidv4 } from "uuid";
+import bcrypt from "bcrypt";
 
 const appRouter = express.Router();
 const oauth = new Oauth2Server({
@@ -67,8 +68,14 @@ appRouter.post("/signup", (req, res) => {
       console.log("such user exists");
       res.sendStatus(409);
     } else {
-      Users.create({ email: req.body.email, password: req.body.password });
-      res.sendStatus(200);
+      bcrypt.hash(req.body.password, 10, (err, hash) => {
+        if (err) {
+          res.sendStatus(409);
+        } else {
+          Users.create({ email: req.body.email, password: hash });
+          res.sendStatus(200);
+        }
+      });
     }
   });
 });
@@ -82,18 +89,26 @@ appRouter.post("/login", (req, res) => {
     attributes: ["email", "password", "id"],
     where: {
       email: req.body.username,
-      password: req.body.password,
     },
   }).then((data) => {
     if (data) {
-      let response = new Response(res);
-      let request = new Request(req);
-      oauth
-        .token(request, response)
-        .then((token) => {
-          res.json(token.accessToken);
-        })
-        .catch((err) => res.status(err.code || 500).json(err));
+      bcrypt.compare(
+        req.body.password,
+        data.dataValues.password,
+        (err, result) => {
+          if (result === true) {
+            req.body.password = data.dataValues.password;
+            let response = new Response(res);
+            let request = new Request(req);
+            oauth
+              .token(request, response)
+              .then((token) => {
+                res.json(token.accessToken);
+              })
+              .catch((err) => res.status(err.code || 500).json(err));
+          }
+        }
+      );
     }
   });
 });
