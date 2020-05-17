@@ -12,9 +12,10 @@ import {
   deleteList,
   deleteTodo,
 } from "./controllers/index.mjs";
-import { Users, Tokens, Lists } from "./config/models.mjs";
+import { Users, Tokens } from "./config/models.mjs";
 import model from "./config/oauthModel.mjs";
 import Oauth2Server from "oauth2-server";
+import { v4 as uuidv4 } from "uuid";
 
 const appRouter = express.Router();
 const oauth = new Oauth2Server({
@@ -123,6 +124,52 @@ appRouter.post("/deleteToken", (req, res) => {
     .catch((err) => {
       res.sendStatus(400);
     });
+});
+
+appRouter.post("/anonymous", (req, res) => {
+  const loginData = JSON.parse(Object.keys(req.body)[0]);
+  req.body.username = loginData.username;
+  req.body.password = loginData.password;
+  req.body.grant_type = loginData.grant_type;
+  Users.create({ email: req.body.username, password: req.body.password }).then(
+    (usersResponse) => {
+      let response = new Response(res);
+      let request = new Request(req);
+      oauth
+        .token(request, response)
+        .then((token) => {
+          res.json(token.accessToken);
+        })
+        .catch((err) => res.status(err.code || 500).json(err));
+    }
+  );
+});
+
+appRouter.post("/deleteAnonymous", (req, res) => {
+  console.log("called");
+  Tokens.findOne({
+    where: {
+      access_token: req.body.token,
+    },
+  }).then((tokenResponse) => {
+    Tokens.destroy({
+      where: {
+        access_token: req.body.token,
+      },
+    })
+      .then(() => {
+        Users.destroy({
+          where: {
+            id: tokenResponse.dataValues.user_id,
+          },
+        }).then(() => {
+          res.sendStatus(200);
+        });
+      })
+      .catch((err) => {
+        res.sendStatus(400);
+      });
+  });
 });
 
 appRouter.get("*", (req, res) => {

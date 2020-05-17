@@ -2,13 +2,15 @@ import { put, takeEvery, call } from 'redux-saga/effects';
 
 function fetchListData(userId) {
   return new Promise((resolve, reject) => {
+    console.log('called the fetch' + userId);
     fetch(`http://localhost:4000/user/${userId}/listdata`)
       .then(res => res.json())
       .then(response => {
+        console.log(response);
         resolve(response);
       })
       .catch(() => {
-        resolve('error');
+        reject('error');
       });
   });
 }

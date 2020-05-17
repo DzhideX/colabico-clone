@@ -46,21 +46,8 @@ const NewList = ({ userId, todos, dispatch }) => {
           payload: { userId, value: e.target.value },
         });
       } else {
-        // console.log('sign in!');
-        // firebase
-        //   .auth()
-        //   .signInAnonymously()
-        //   .then(res => {
-        //     dispatch(push('/', '/'));
-        //     dispatch({ type: 'REQUEST_USER_ID' });
-        //     db.collection(`users`)
-        //       .doc(res.user.uid)
-        //       .set({ state: 'user' });
-        // })
-        // .catch(function(error) {
-        //   var errorCode = error.code;
-        //   console.log(errorCode);
-        // });
+        // DISPATCH FOR ANONYMOUS SIGN IN GOES HERE
+        dispatch({ type: 'REQUEST_ANONYMOUS_SIGN_IN' });
       }
     }
   };
@@ -98,20 +85,8 @@ const NewList = ({ userId, todos, dispatch }) => {
                 payload: { userId, name: listName },
               });
             } else {
-              // firebase
-              //   .auth()
-              //   .signInAnonymously()
-              //   .then(res => {
-              //     dispatch(push('/', '/'));
-              //     dispatch({ type: 'REQUEST_USER_ID' });
-              //     db.collection(`users`)
-              //       .doc(res.user.uid)
-              //       .set({ state: 'user' });
-              //   })
-              //   .catch(function(error) {
-              //     var errorCode = error.code;
-              //     console.log(errorCode);
-              //   });
+              // DISPATCH FOR ANONYMOUS SIGN IN GOES HERE
+              dispatch({ type: 'REQUEST_ANONYMOUS_SIGN_IN' });
             }
           }}
           onFocus={onInputFocus}

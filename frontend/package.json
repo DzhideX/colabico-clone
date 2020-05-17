@@ -23,6 +23,7 @@
     "redux-thunk": "^2.3.0",
     "universal-cookie": "^4.0.3",
     "use-force-update": "^1.0.7",
+    "uuid": "^8.0.0",
     "yup": "^0.28.1"
   },
   "scripts": {

@@ -74,7 +74,6 @@ const Home = ({ userId, location, listData, dispatch }) => {
   useEffect(() => {
     if (userId) {
       dispatch({ type: 'REQUEST_LIST_DATA', payload: userId });
-    } else {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);

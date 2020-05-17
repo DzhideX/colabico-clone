@@ -15,6 +15,7 @@ import addListSaga from '../saga/addListSaga';
 import loginSaga from '../saga/loginSaga';
 import signUpSaga from '../saga/signUpSaga';
 import logOutSaga from '../saga/logOutSaga';
+import anonymousSignIn from '../saga/anonymousSignIn';
 import reducer from '../reducer/reducer';
 
 //--------------------------------------------
@@ -72,6 +73,7 @@ export default function configureStore(preloadedState) {
   sagaMiddleware.run(loginSaga);
   sagaMiddleware.run(signUpSaga);
   sagaMiddleware.run(logOutSaga);
+  sagaMiddleware.run(anonymousSignIn);
 
   return store;
 }

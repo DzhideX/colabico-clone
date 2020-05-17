@@ -9,7 +9,11 @@ function fetchUser() {
     if (tokenValue) {
       fetch('http://localhost:4000/authorize', {
         headers: {
-          Authorization: `Bearer ${tokenValue}`,
+          Authorization: `Bearer ${
+            tokenValue.split(' ')[0] === 'anon'
+              ? tokenValue.split(' ')[1]
+              : tokenValue
+          }`,
         },
       })
         .then(res => res.json())

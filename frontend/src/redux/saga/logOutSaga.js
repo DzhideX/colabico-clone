@@ -7,22 +7,41 @@ const cookies = new Cookies();
 function logout() {
   return new Promise((resolve, reject) => {
     const token = cookies.get('token');
-    cookies.remove('token');
-    fetch('http://localhost:4000/deleteToken', {
-      method: 'POST',
-      body: JSON.stringify({
-        token,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then(response => {
-      if (response.status >= 400) {
-        reject('rejected');
-      } else {
-        resolve('resolved');
-      }
-    });
+    if (token.split(' ')[0] === 'anon') {
+      cookies.remove('token');
+      fetch('http://localhost:4000/deleteAnonymous', {
+        method: 'POST',
+        body: JSON.stringify({
+          token: token.split(' ')[1],
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then(response => {
+        if (response.status >= 400) {
+          reject('rejected');
+        } else {
+          resolve('resolved');
+        }
+      });
+    } else {
+      cookies.remove('token');
+      fetch('http://localhost:4000/deleteToken', {
+        method: 'POST',
+        body: JSON.stringify({
+          token,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }).then(response => {
+        if (response.status >= 400) {
+          reject('rejected');
+        } else {
+          resolve('resolved');
+        }
+      });
+    }
   });
 }
 

@@ -2,6 +2,7 @@ import { Lists, Todos } from "../config/models.mjs";
 
 const getListData = (req, res) => {
   let Arr = [];
+  console.log("getListData started");
   Lists.findAll({
     //Find lists that correspond to this user id
     where: {
@@ -33,6 +34,7 @@ const getListData = (req, res) => {
         }; //Create an object with list name,id, value of last todo, number of todos
         Arr.push(tempObj); //Push this object into a "global" array
         if (Arr.length === listsResponse.length) {
+          console.log("responded");
           res.json(Arr); //Respond with finished array
         }
       });
