@@ -1,4 +1,6 @@
 import { Todos } from "../config/models.mjs";
+import redis from "redis";
+import client from "../app.mjs";
 
 const addTodo = (req, res) => {
   let addedTodo = {
@@ -11,6 +13,8 @@ const addTodo = (req, res) => {
   }).then((response) => {
     res.json({ ...addedTodo, id: response.dataValues.id });
   });
+  client.set(`todos/${req.params.listid}`, "", redis.print);
+  client.set(`lists/${req.params.userid}`, "", redis.print);
 };
 
 export default addTodo;

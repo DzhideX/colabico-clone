@@ -1,4 +1,6 @@
 import { Lists } from "../config/models.mjs";
+import redis from "redis";
+import client from "../app.mjs";
 
 const addListViaName = (req, res) => {
   Lists.create({
@@ -12,6 +14,7 @@ const addListViaName = (req, res) => {
       location: `/l/${response.dataValues.id}`,
     });
   });
+  client.set(`lists/${req.params.userid}`, "", redis.print);
 };
 
 export default addListViaName;

@@ -1,4 +1,6 @@
 import { Lists, Todos } from "../config/models.mjs";
+import redis from "redis";
+import client from "../app.mjs";
 
 const addListViaValue = (req, res) => {
   Lists.create({
@@ -18,6 +20,7 @@ const addListViaValue = (req, res) => {
       });
     });
   });
+  client.set(`lists/${req.params.userid}`, "", redis.print);
 };
 
 export default addListViaValue;

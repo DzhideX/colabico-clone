@@ -1,4 +1,6 @@
 import { Todos } from "../config/models.mjs";
+import redis from "redis";
+import client from "../app.mjs";
 
 const setTodoState = (req, res) => {
   Todos.update(
@@ -13,6 +15,7 @@ const setTodoState = (req, res) => {
   ).then(() => {
     res.json({ todoId: req.params.todoid, desiredState: req.params.state });
   });
+  client.set(`todos/${req.params.listid}`, "", redis.print);
 };
 
 export default setTodoState;
