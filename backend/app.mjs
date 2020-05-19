@@ -16,8 +16,8 @@ client.on("error", (err) => {
   console.log(err);
 });
 
-app.listen(process.env.PORT, () => {
+const server = app.listen(process.env.PORT, () => {
   console.log(`server is up on port ${process.env.PORT}!`);
 });
 
-export default client;
+export { client as default, app, server };

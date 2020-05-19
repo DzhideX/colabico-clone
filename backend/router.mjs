@@ -188,7 +188,9 @@ appRouter.post("/deleteAnonymous", (req, res) => {
 });
 
 appRouter.get("*", (req, res) => {
-  res.send("404");
+  res.json({
+    status: 404,
+  });
 });
 
 export default appRouter;
