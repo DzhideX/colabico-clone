@@ -34,9 +34,9 @@ appRouter.get("/user/:userid/list/:listid/todos", getUserTodos);
 
 appRouter.get("/list/:listid/todos", getAnonymousTodos);
 
-appRouter.post("/user/:userid", addListViaName);
+appRouter.post("/user/:userid", addListViaName); // test added
 
-appRouter.post("/user/:userid/listvalue/:value", addListViaValue);
+appRouter.post("/user/:userid/listvalue/:value", addListViaValue); //testing
 
 appRouter.post("/user/:userid/list/:listid/todo/:todovalue", addTodo);
 
