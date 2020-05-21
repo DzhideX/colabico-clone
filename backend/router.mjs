@@ -34,13 +34,13 @@ appRouter.get("/user/:userid/list/:listid/todos", getUserTodos);
 
 appRouter.get("/list/:listid/todos", getAnonymousTodos);
 
-appRouter.post("/user/:userid", addListViaName); // test added
+appRouter.post("/user/:userid", addListViaName);
 
-appRouter.post("/user/:userid/listvalue/:value", addListViaValue); // test added
+appRouter.post("/user/:userid/listvalue/:value", addListViaValue);
 
-appRouter.post("/user/:userid/list/:listid/todo/:todovalue", addTodo); // test added
+appRouter.post("/user/:userid/list/:listid/todo/:todovalue", addTodo);
 
-appRouter.put("/user/:userid/list/:listid", changeListName); //test added
+appRouter.put("/user/:userid/list/:listid", changeListName);
 
 appRouter.put(
   "/user/:userid/list/:listid/todo/:todoid/state/:state",
@@ -52,9 +52,9 @@ appRouter.put(
   setTodoValue
 );
 
-appRouter.delete("/user/:userid/list/:listid", deleteList); // test added
+appRouter.delete("/user/:userid/list/:listid", deleteList);
 
-appRouter.delete("/user/:userid/list/:listid/todo/:todoid", deleteTodo); //testing
+appRouter.delete("/user/:userid/list/:listid/todo/:todoid", deleteTodo);
 
 appRouter.post("/signup", (req, res) => {
   console.log(req.body);

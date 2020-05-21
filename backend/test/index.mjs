@@ -10,6 +10,7 @@ describe("Backend routes tests", () => {
     id: "432f892f-e0ac-48f5-9b52-4ad2a1fbe8ea", // both user id and list id
     listname: "TEST LISTNAME",
     todoValue: "TEST TODO",
+    todoState: "working",
   };
 
   before(() => {
@@ -52,14 +53,17 @@ describe("Backend routes tests", () => {
             });
           });
         });
-        if (list.dataValues.id !== testData.id) {
-          Lists.destroy({
-            where: {
-              id: list.dataValues.id,
-            },
-          });
-        }
+        Lists.destroy({
+          where: {
+            id: list.dataValues.id,
+          },
+        });
       });
+    });
+    Todos.destroy({
+      where: {
+        list_id: testData.id,
+      },
     });
   });
 
@@ -111,12 +115,78 @@ describe("Backend routes tests", () => {
       });
   });
 
+  it("correctly gets user data", (done) => {
+    request(app)
+      .get(`/user/${testData.id}/listdata`)
+      .then((res) => {
+        expect(res.body).to.be.an("array");
+        expect(res.body[0]).to.have.property("name");
+        expect(res.body[0]).to.have.property("id");
+        expect(res.body[0]).to.have.property("numberOfTodos");
+        expect(res.body[0]).to.have.property("lastTodo");
+        done();
+      });
+  });
+
+  it("correctly gets anonymous todos", (done) => {
+    request(app)
+      .get(`/list/${testData.id}/todos`)
+      .then((res) => {
+        expect(res.body).to.have.property("name");
+        expect(res.body).to.have.property("todos");
+        expect(res.body.todos).to.be.an("array");
+        expect(res.body.todos[0]).to.have.property("state");
+        expect(res.body.todos[0]).to.have.property("value");
+        expect(res.body.todos[0]).to.have.property("id");
+        done();
+      });
+  });
+
+  it("correctly gets user todos", (done) => {
+    request(app)
+      .get(`/user/${testData.id}/list/${testData.id}/todos`)
+      .then((res) => {
+        expect(res.body).to.have.property("name");
+        expect(res.body).to.have.property("todos");
+        expect(res.body.todos).to.be.an("array");
+        expect(res.body.todos[0]).to.have.property("state");
+        expect(res.body.todos[0]).to.have.property("value");
+        expect(res.body.todos[0]).to.have.property("id");
+        console.log(res.body);
+        done();
+      });
+  });
+
   it("correctly changes list name", (done) => {
     request(app)
       .put(`/user/${testData.id}/list/${testData.id}`)
       .query({ name: testData.listname })
       .then((res) => {
         expect(res.body).to.eql(testData.listname);
+        done();
+      });
+  });
+
+  it("correctly sets todo state", (done) => {
+    request(app)
+      .put(
+        `/user/${testData.id}/list/${testData.id}/todo/${testData.id}/state/${testData.todoState}`
+      )
+      .then((res) => {
+        expect(res.body.todoId).to.eql(testData.id);
+        expect(res.body.desiredState).to.eql(testData.todoState);
+        done();
+      });
+  });
+
+  it("correctly sets todo value", (done) => {
+    request(app)
+      .put(
+        `/user/${testData.id}/list/${testData.id}/todo/${testData.id}/value/${testData.todoValue}`
+      )
+      .then((res) => {
+        expect(res.body.todoId).to.eql(testData.id);
+        expect(res.body.value).to.eql(testData.todoValue);
         done();
       });
   });
