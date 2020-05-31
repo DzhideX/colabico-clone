@@ -35,14 +35,13 @@ function signInAnonymously() {
 
 function* handleAnonymousSignIn(action) {
   try {
-    let response = yield call(signInAnonymously);
+    yield call(signInAnonymously);
     yield put({
       type: 'ANONYMOUS_SIGN_IN_SUCCESS',
       payload: {
         status: 'success',
       },
     });
-    // yield put(push(response.location));
     yield put(push('/', '/'));
     yield put({ type: 'REQUEST_USER_ID' });
   } catch (e) {

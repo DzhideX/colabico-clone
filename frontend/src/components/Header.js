@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { firebase } from '../firebase/firebase';
 
 const Header = ({ userId, dispatch }) => {
   const [userState, setUserState] = useState('');
-  const [userAnonymous, updateUserAnonymous] = useState();
 
   useEffect(() => {
     if (userId) {
@@ -13,21 +11,10 @@ const Header = ({ userId, dispatch }) => {
     } else {
       setUserState('login');
     }
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        if (user.isAnonymous) {
-          updateUserAnonymous(user);
-        }
-      } else {
-      }
-    });
   }, [userId]);
 
   const handleLogOut = () => {
-    dispatch({
-      type: 'REQUEST_LOGOUT',
-      payload: { userAnonymous: userAnonymous ? userAnonymous : false, userId },
-    });
+    dispatch({ type: 'REQUEST_LOGOUT' });
     window.location.href = '/';
   };
 

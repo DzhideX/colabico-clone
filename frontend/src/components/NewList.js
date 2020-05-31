@@ -1,8 +1,6 @@
 import React, { useState, useRef } from 'react';
 import edit from '../pictures/edit.png';
-import { firebase, db } from '../firebase/firebase';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 
 const NewList = ({ userId, todos, dispatch }) => {
   const [listName, setListName] = useState('');
