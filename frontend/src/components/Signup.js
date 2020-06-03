@@ -87,8 +87,15 @@ const Signup = ({ dispatch }) => {
         </p>
       </Link>
       <p className="signup__form__terms">
-        By signing up, you agree to our <a href="/terms">Terms of Use</a> and{' '}
-        <a href="/privacy">Privacy Policy</a>.
+        By signing up, you agree to our{' '}
+        <Link to="/terms">
+          <span>Terms of Use</span>
+        </Link>{' '}
+        and{' '}
+        <Link to="/privacy">
+          <span>Privacy Policy</span>
+        </Link>
+        .
       </p>
     </div>
   );
