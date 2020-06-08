@@ -19,7 +19,9 @@ app.use('*', (req, res, next) => {
     return res.send(
       data.replace(
         '<div id="root"></div>',
-        `<div id="root">${ReactDOMServer.renderToString(<App />)}</div>`,
+        `<div id="root">${ReactDOMServer.renderToString(
+          <App location={req.url} context={{}} />,
+        )}</div>`,
       ),
     );
   });

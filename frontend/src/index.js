@@ -1,17 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import './styles/styles.scss';
-// import * as serviceWorker from './serviceWorker';
-import AppRouter from './routers/AppRouter';
 import { ConnectedRouter } from 'connected-react-router';
 import configureStore, { history } from './redux/store/index';
+import AppRouter from './routers/AppRouter';
+import './styles/styles.scss';
 
 const store = configureStore();
 
 require('dotenv').config();
 
-const App = () => (
+const App = ({ location, context }) => (
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <AppRouter />
@@ -19,12 +18,9 @@ const App = () => (
   </Provider>
 );
 
-// ReactDOM.hydrate(<App />, document.getElementById('root'));
-
 if (typeof window !== 'undefined') {
   ReactDOM.hydrate(<App />, document.getElementById('root'));
 }
+//location={location} context={context}
 
 export default App;
-
-// serviceWorker.unregister();
