@@ -3,14 +3,17 @@ import fs from 'fs';
 import path from 'path';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-
-import App from '../src/index';
+import { Provider } from 'react-redux';
+import configureStore from '../src/redux/store/index';
+import AppRouter from '../src/routers/AppRouter';
+import { StaticRouter } from 'react-router-dom';
 
 const app = express();
+const store = configureStore();
 
 app.use(express.static(path.resolve(__dirname, '..', 'build')));
 
-app.use('*', (req, res, next) => {
+app.use('/*', (req, res, next) => {
   fs.readFile(path.resolve('./build/index.html'), 'utf-8', (err, data) => {
     if (err) {
       console.log(err);
@@ -20,7 +23,11 @@ app.use('*', (req, res, next) => {
       data.replace(
         '<div id="root"></div>',
         `<div id="root">${ReactDOMServer.renderToString(
-          <App location={req.url} context={{}} />,
+          <Provider store={store}>
+            <StaticRouter location={req.url} context={{}}>
+              <AppRouter />
+            </StaticRouter>
+          </Provider>,
         )}</div>`,
       ),
     );
