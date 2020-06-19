@@ -12,7 +12,7 @@ import {
   deleteList,
   deleteTodo,
 } from "./controllers/index.mjs";
-import { Users, Tokens } from "./config/models.mjs";
+import { Users, Tokens, Lists, Todos } from "./config/models.mjs";
 import model from "./config/oauthModel.mjs";
 import Oauth2Server from "oauth2-server";
 import { v4 as uuidv4 } from "uuid";
@@ -173,11 +173,30 @@ appRouter.post("/deleteAnonymous", (req, res) => {
       },
     })
       .then(() => {
+        console.log(tokenResponse);
         Users.destroy({
           where: {
             id: tokenResponse.dataValues.user_id,
           },
         }).then(() => {
+          Lists.findAll({
+            where: {
+              user_id: tokenResponse.dataValues.user_id,
+            },
+          }).then((listsResponse) => {
+            listsResponse.forEach((list) => {
+              Todos.destroy({
+                where: {
+                  list_id: list.dataValues.id,
+                },
+              });
+            });
+            Lists.destroy({
+              where: {
+                user_id: tokenResponse.dataValues.user_id,
+              },
+            });
+          });
           res.sendStatus(200);
         });
       })
