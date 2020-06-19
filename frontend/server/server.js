@@ -24,7 +24,7 @@ app.use('/*', (req, res, next) => {
         '<div id="root"></div>',
         `<div id="root">${ReactDOMServer.renderToString(
           <Provider store={store}>
-            <StaticRouter location={req.url} context={{}}>
+            <StaticRouter location={req.originalUrl} context={{}}>
               <AppRouter />
             </StaticRouter>
           </Provider>,
