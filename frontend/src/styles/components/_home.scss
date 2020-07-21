@@ -49,17 +49,10 @@
   &:hover {
     background-color: #313131;
   }
-<<<<<<< HEAD
   @media (max-width: 900px) {
     width: 30rem;
   }
   @media (max-width: 600px) {
-=======
-  @media (max-width: 750px) {
-    width: 30rem;
-  }
-  @media (max-width: 375px) {
->>>>>>> 13c0e8b03b80c15f2db754b3f2cfa13e4d5e4401
     width: 17rem;
   }
 }
@@ -85,18 +78,11 @@
   height: 100%;
   flex: 1;
   display: flex;
-<<<<<<< HEAD
-=======
   align-items: center;
->>>>>>> 13c0e8b03b80c15f2db754b3f2cfa13e4d5e4401
   justify-content: flex-start;
   background-color: transparent;
   border: none;
   cursor: pointer;
-<<<<<<< HEAD
-  align-items: center;
-=======
->>>>>>> 13c0e8b03b80c15f2db754b3f2cfa13e4d5e4401
   &:hover {
     background-color: #313131;
   }
@@ -105,12 +91,9 @@
   }
   p {
     margin-right: 0.5rem;
-<<<<<<< HEAD
     @media (max-width: 600px) {
       font-size: 0.8rem;
     }
-=======
->>>>>>> 13c0e8b03b80c15f2db754b3f2cfa13e4d5e4401
   }
 }
 
