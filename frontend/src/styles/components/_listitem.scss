@@ -23,10 +23,10 @@
       visibility: visible;
     }
   }
-  @media (max-width: 750px) {
+  @media (max-width: 950px) {
     width: 30rem;
   }
-  @media (max-width: 375px) {
+  @media (max-width: 600px) {
     width: 20rem;
     .list-item__right__copy,
     .list-item__right__trash,
@@ -83,8 +83,9 @@
   margin-left: 1rem;
   display: none;
   cursor: pointer;
-  @media (max-width: 375px) {
+  @media (max-width: 600px) {
     display: block;
+    height: 1rem;
   }
 }
 
@@ -95,8 +96,9 @@
   display: flex;
   align-items: center;
   height: 100%;
-  @media (max-width: 375px) {
+  @media (max-width: 600px) {
     margin-left: 0.3rem;
+    font-size: 0.8rem;
   }
 }
 
