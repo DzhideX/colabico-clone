@@ -52,7 +52,7 @@ const mapStateToProps = state => {
   };
 };
 
-const RouterWithHistory = connect(mapStateToProps)(withRouter(Router));
+const RouterWithHistory = withRouter(connect(mapStateToProps)(Router));
 
 const AppRouter = () => <RouterWithHistory />;
 

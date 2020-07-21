@@ -13,7 +13,6 @@ const List = ({ userId, todos, dispatch, location, listNameRedux, action }) => {
     working: true,
     pending: true,
   });
-  let noRenderedTodos = 0;
 
   useEffect(() => {
     if (userId) {
@@ -190,22 +189,12 @@ const List = ({ userId, todos, dispatch, location, listNameRedux, action }) => {
                 dispatch={dispatch}
               />
             );
-          } else {
-            ++noRenderedTodos;
           }
         })}
     </div>
   );
 };
 
-// {noRenderedTodos === todos.length && (
-//   <p className="newlist__errormessage">
-//     {' '}
-//     Add todos or edit preferences to show todos!{' '}
-//   </p>
-// )}
-
-//(todoObject[key].state === filters.working || todoObject[key].state === filters.done || todoObject[key].state === filters.pending)
 const mapStateToProps = state => ({
   userId: state.reducer.userId,
   todos: state.reducer.todos,

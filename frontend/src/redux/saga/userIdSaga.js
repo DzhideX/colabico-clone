@@ -1,5 +1,6 @@
 import { put, takeEvery, call } from 'redux-saga/effects';
 import Cookies from 'universal-cookie';
+import 'regenerator-runtime/runtime.js';
 
 const cookies = new Cookies();
 

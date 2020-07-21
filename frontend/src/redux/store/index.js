@@ -25,7 +25,7 @@ import reducer from '../reducer/reducer';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
-import { createBrowserHistory } from 'history';
+import { createBrowserHistory, createMemoryHistory } from 'history';
 
 //--------------------------------------------
 //:: SETTING UP ROOT REDUCER
@@ -42,8 +42,18 @@ const createRootReducer = history =>
 //--------------------------------------------
 
 const sagaMiddleware = createSagaMiddleware();
-export const history = createBrowserHistory();
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+export const history =
+  typeof window === 'undefined'
+    ? createMemoryHistory()
+    : createBrowserHistory();
+// const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const windowExist = typeof window === 'object';
+
+const composeEnhancers =
+  windowExist && window.REDUX_DEVTOOLS_EXTENSION_COMPOSE
+    ? window.REDUX_DEVTOOLS_EXTENSION_COMPOSE
+    : compose;
 
 //--------------------------------------------
 //:: SETUP OF THE STATE

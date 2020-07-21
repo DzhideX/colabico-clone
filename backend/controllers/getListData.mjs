@@ -14,12 +14,18 @@ const getListData = (req, res) => {
           user_id: req.params.userid,
         },
       }).then((listsResponse) => {
+        let lists = [];
         listsResponse.forEach((list) => {
+          //Push all lists in an array
+          lists.push(list.dataValues);
+        });
+        const sortedLists = lists.sort((a, b) => a.created_at - b.created_at); // Sort lists by date
+        sortedLists.forEach((list) => {
           // Loop through all of those lists
           Todos.findAll({
             // Find all todos that correspond to each list
             where: {
-              list_id: list.dataValues.id,
+              list_id: list.id,
             },
           }).then((todosResponse) => {
             //Loop through todos
@@ -32,8 +38,8 @@ const getListData = (req, res) => {
               (a, b) => a.created_at - b.created_at
             ); //Sort todos by date
             let tempObj = {
-              name: list.dataValues.name,
-              id: list.dataValues.id,
+              name: list.name,
+              id: list.id,
               numberOfTodos: todosResponse ? todosResponse.length : 0,
               lastTodo: sortedTodos[sortedTodos.length - 1]
                 ? sortedTodos[sortedTodos.length - 1].value

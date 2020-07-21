@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { firebase } from '../firebase/firebase';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 
@@ -27,27 +26,27 @@ const Reset = () => {
   }, [errors]);
 
   const handleReset = ({ email }) => {
-    if (email) {
-      firebase
-        .auth()
-        .sendPasswordResetEmail(email)
-        .then(function() {
-          console.log('email sent!');
-          updateEmailSent(email);
-        })
-        .catch(function(error) {
-          setErrorMessage(error.message);
-        });
-    }
-    if (emailSent) {
-      firebase
-        .auth()
-        .sendPasswordResetEmail(emailSent)
-        .then(function() {})
-        .catch(function(error) {
-          setErrorMessage(error.message);
-        });
-    }
+    // if (email) {
+    //   firebase
+    //     .auth()
+    //     .sendPasswordResetEmail(email)
+    //     .then(function() {
+    //       console.log('email sent!');
+    //       updateEmailSent(email);
+    //     })
+    //     .catch(function(error) {
+    //       setErrorMessage(error.message);
+    //     });
+    // }
+    // if (emailSent) {
+    //   firebase
+    //     .auth()
+    //     .sendPasswordResetEmail(emailSent)
+    //     .then(function() {})
+    //     .catch(function(error) {
+    //       setErrorMessage(error.message);
+    //     });
+    // }
   };
 
   if (emailSent) {
